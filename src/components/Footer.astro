@@ -1,0 +1,23 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+const repo = "https://github.com/whereisanzi/whereisanzi.github.io";
+---
+
+<footer class="border-t border-gray-200/70 dark:border-white/10">
+  <div
+    class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-gray-500 dark:text-gray-400 sm:flex-row sm:px-6"
+  >
+    <p>© {year} whereisanzi</p>
+    <p>
+      {t("footer.builtWith")}{" "}
+      <a
+        href={repo}
+        class="font-medium text-gray-700 underline underline-offset-2 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-400"
+        >GitHub</a
+      >.
+    </p>
+  </div>
+</footer>

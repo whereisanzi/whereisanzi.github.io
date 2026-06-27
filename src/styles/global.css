@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/roboto-mono";
+
+/* Dark mode is driven by a `.dark` class on <html> (toggled via JS). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Roboto Mono Variable", ui-monospace, monospace;
+
+  --color-background-dark: #262626;
+
+  --color-brand-50: #eef7ff;
+  --color-brand-100: #d9edff;
+  --color-brand-200: #bce0ff;
+  --color-brand-300: #8eccff;
+  --color-brand-400: #59afff;
+  --color-brand-500: #338dff;
+  --color-brand-600: #1c6cf5;
+  --color-brand-700: #1556e1;
+  --color-brand-800: #1846b6;
+  --color-brand-900: #1a3f8f;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent theme-flash transition on initial load */
+.no-transitions * {
+  transition: none !important;
+}
+
+/* Article (markdown) typography */
+.prose {
+  line-height: 1.75;
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  letter-spacing: -0.01em;
+}
+.prose h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.4em;
+}
+.prose a {
+  color: var(--color-brand-600);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.dark .prose a {
+  color: var(--color-brand-400);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: rgba(127, 127, 127, 0.15);
+  padding: 0.15em 0.4em;
+  border-radius: 0.3em;
+}
+.prose pre {
+  font-family: var(--font-mono);
+  padding: 1rem 1.15rem;
+  border-radius: 0.6rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose pre code {
+  background: transparent;
+  padding: 0;
+}
+.prose ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+.prose blockquote {
+  border-left: 3px solid var(--color-brand-500);
+  padding-left: 1rem;
+  font-style: italic;
+  opacity: 0.85;
+}

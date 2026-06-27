@@ -1,0 +1,53 @@
+---
+import type { Lang } from "../i18n/ui";
+import { useTranslations, localizedPath } from "../i18n/utils";
+import { getTutorials } from "../lib/content";
+import PostCard from "../components/PostCard.astro";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const posts = (await getTutorials(lang)).slice(0, 5);
+---
+
+<section class="pb-10">
+  <p class="font-mono text-sm text-brand-600 dark:text-brand-400">
+    {t("site.tagline")}
+  </p>
+  <h1
+    class="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+  >
+    {t("site.title")}<span class="text-brand-500">.</span>
+  </h1>
+  <p class="mt-4 max-w-2xl text-base leading-relaxed text-gray-600 dark:text-gray-300">
+    {t("home.intro")}
+  </p>
+</section>
+
+<section>
+  <div class="flex items-baseline justify-between">
+    <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+      {t("home.latest")}
+    </h2>
+    <a
+      href={localizedPath("/tutorials", lang)}
+      class="font-mono text-xs text-brand-600 hover:underline dark:text-brand-400"
+    >
+      {t("home.viewAll")} →
+    </a>
+  </div>
+
+  {
+    posts.length === 0 ? (
+      <p class="mt-6 text-gray-500 dark:text-gray-400">{t("tutorials.empty")}</p>
+    ) : (
+      <div class="mt-2 divide-y divide-gray-100 dark:divide-white/5">
+        {posts.map((post) => (
+          <PostCard post={post} lang={lang} />
+        ))}
+      </div>
+    )
+  }
+</section>

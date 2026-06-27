@@ -1,0 +1,41 @@
+---
+import type { Lang } from "../i18n/ui";
+import { formatDate, localizedPath } from "../i18n/utils";
+import { postSlug, type Tutorial } from "../lib/content";
+
+interface Props {
+  post: Tutorial;
+  lang: Lang;
+}
+
+const { post, lang } = Astro.props;
+const href = localizedPath(`/tutorials/${postSlug(post)}`, lang);
+---
+
+<article class="group">
+  <a href={href} class="block rounded-xl py-4 transition-colors">
+    <div class="flex items-center gap-2 font-mono text-xs text-gray-500 dark:text-gray-400">
+      <time datetime={post.data.pubDate.toISOString()}>
+        {formatDate(post.data.pubDate, lang)}
+      </time>
+      {
+        post.data.tags.length > 0 && (
+          <>
+            <span>·</span>
+            <span class="text-brand-600 dark:text-brand-400">
+              {post.data.tags.slice(0, 2).map((tag) => `#${tag}`).join(" ")}
+            </span>
+          </>
+        )
+      }
+    </div>
+    <h3
+      class="mt-1 text-lg font-semibold tracking-tight text-gray-900 transition-colors group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400"
+    >
+      {post.data.title}
+    </h3>
+    <p class="mt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+      {post.data.description}
+    </p>
+  </a>
+</article>

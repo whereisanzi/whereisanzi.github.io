@@ -1,0 +1,48 @@
+---
+import type { Lang } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const body = {
+  en: [
+    "I'm Anzi, a software engineer who likes building things for the web and writing about what I learn.",
+    "This blog is where I keep tutorials, notes and write-ups, mostly so future me can find them again, and maybe they help you too.",
+    "Everything here is open source. Found a typo or have a suggestion? Pull requests are welcome.",
+  ],
+  pt: [
+    "Eu sou o Anzi, engenheiro de software que gosta de construir coisas para a web e escrever sobre o que aprende.",
+    "Este blog é onde guardo tutoriais, anotações e write-ups, principalmente para o meu eu do futuro reencontrar, e quem sabe ajudar você também.",
+    "Tudo aqui é código aberto. Achou um erro ou tem uma sugestão? Pull requests são bem-vindos.",
+  ],
+};
+
+const links = [
+  { label: "GitHub", href: "https://github.com/whereisanzi" },
+  { label: "RSS", href: "/rss.xml" },
+];
+---
+
+<section class="prose max-w-none text-gray-700 dark:text-gray-300">
+  <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+    {t("about.title")}
+  </h1>
+  {body[lang].map((p) => <p>{p}</p>)}
+
+  <div class="not-prose mt-8 flex flex-wrap gap-3">
+    {
+      links.map((link) => (
+        <a
+          href={link.href}
+          class="rounded-lg border border-gray-200 px-4 py-2 font-mono text-sm text-gray-700 transition-colors hover:border-brand-500 hover:text-brand-600 dark:border-white/10 dark:text-gray-300 dark:hover:border-brand-400 dark:hover:text-brand-400"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+  </div>
+</section>

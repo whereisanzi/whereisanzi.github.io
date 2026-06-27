@@ -1,0 +1,32 @@
+---
+import type { Lang } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+import { getTutorials } from "../lib/content";
+import PostCard from "../components/PostCard.astro";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const posts = await getTutorials(lang);
+---
+
+<section>
+  <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+    {t("tutorials.title")}
+  </h1>
+  <p class="mt-2 text-gray-600 dark:text-gray-400">{t("tutorials.subtitle")}</p>
+
+  {
+    posts.length === 0 ? (
+      <p class="mt-8 text-gray-500 dark:text-gray-400">{t("tutorials.empty")}</p>
+    ) : (
+      <div class="mt-6 divide-y divide-gray-100 dark:divide-white/5">
+        {posts.map((post) => (
+          <PostCard post={post} lang={lang} />
+        ))}
+      </div>
+    )
+  }
+</section>

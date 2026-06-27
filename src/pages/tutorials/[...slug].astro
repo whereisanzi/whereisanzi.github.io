@@ -1,0 +1,23 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Post from "../../sections/Post.astro";
+import { getTutorials, postSlug } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const posts = await getTutorials("en");
+  return posts.map((post) => ({
+    params: { slug: postSlug(post) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <Post post={post} lang="en">
+    <Content />
+  </Post>
+</BaseLayout>
