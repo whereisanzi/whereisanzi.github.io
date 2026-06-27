@@ -2,7 +2,7 @@ import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 
 export async function GET(context) {
-  const all = await getCollection("tutorials", ({ data }) => !data.draft);
+  const all = await getCollection("articles", ({ data }) => !data.draft);
   const items = all
     .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
     .map((post) => {
@@ -11,7 +11,7 @@ export async function GET(context) {
         title: post.data.title,
         description: post.data.description,
         pubDate: post.data.pubDate,
-        link: `/${post.data.lang}/tutorials/${slug}/`,
+        link: `/${post.data.lang}/articles/${slug}/`,
         categories: post.data.tags,
       };
     });
@@ -19,7 +19,7 @@ export async function GET(context) {
   return rss({
     title: "whereisanzi · yet another tech blog",
     description:
-      "Tutorials, notes and write-ups on software, web and whatever I'm learning.",
+      "Articles, notes and write-ups on software, web and whatever I'm learning.",
     site: context.site,
     items,
   });

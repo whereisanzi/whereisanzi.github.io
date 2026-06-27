@@ -1,7 +1,7 @@
 ---
 import type { Lang } from "../i18n/ui";
 import { useTranslations } from "../i18n/utils";
-import { getTutorials } from "../lib/content";
+import { getArticles } from "../lib/content";
 import PostCard from "../components/PostCard.astro";
 
 interface Props {
@@ -9,18 +9,18 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const posts = await getTutorials(lang);
+const posts = await getArticles(lang);
 ---
 
 <section>
   <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-    {t("tutorials.title")}
+    {t("articles.title")}
   </h1>
-  <p class="mt-2 text-gray-600 dark:text-gray-400">{t("tutorials.subtitle")}</p>
+  <p class="mt-2 text-gray-600 dark:text-gray-400">{t("articles.subtitle")}</p>
 
   {
     posts.length === 0 ? (
-      <p class="mt-8 text-gray-500 dark:text-gray-400">{t("tutorials.empty")}</p>
+      <p class="mt-8 text-gray-500 dark:text-gray-400">{t("articles.empty")}</p>
     ) : (
       <div class="mt-6 divide-y divide-gray-100 dark:divide-white/5">
         {posts.map((post) => (

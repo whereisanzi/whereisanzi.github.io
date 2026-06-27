@@ -1,7 +1,7 @@
 ---
 import type { Lang } from "../i18n/ui";
 import { useTranslations, localizedPath } from "../i18n/utils";
-import { getTutorials } from "../lib/content";
+import { getArticles } from "../lib/content";
 import PostCard from "../components/PostCard.astro";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const posts = (await getTutorials(lang)).slice(0, 5);
+const posts = (await getArticles(lang)).slice(0, 5);
 ---
 
 <section class="pb-10">
@@ -32,7 +32,7 @@ const posts = (await getTutorials(lang)).slice(0, 5);
       {t("home.latest")}
     </h2>
     <a
-      href={localizedPath("/tutorials", lang)}
+      href={localizedPath("/articles", lang)}
       class="font-mono text-xs text-brand-600 hover:underline dark:text-brand-400"
     >
       {t("home.viewAll")} →
@@ -41,7 +41,7 @@ const posts = (await getTutorials(lang)).slice(0, 5);
 
   {
     posts.length === 0 ? (
-      <p class="mt-6 text-gray-500 dark:text-gray-400">{t("tutorials.empty")}</p>
+      <p class="mt-6 text-gray-500 dark:text-gray-400">{t("articles.empty")}</p>
     ) : (
       <div class="mt-2 divide-y divide-gray-100 dark:divide-white/5">
         {posts.map((post) => (

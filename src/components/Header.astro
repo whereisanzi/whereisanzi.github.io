@@ -9,7 +9,7 @@ const t = useTranslations(lang);
 const current = Astro.url.pathname.replace(/\/$/, "") || "/";
 const links = [
   { href: localizedPath("/", lang), label: t("nav.home") },
-  { href: localizedPath("/tutorials", lang), label: t("nav.tutorials") },
+  { href: localizedPath("/articles", lang), label: t("nav.articles") },
   { href: localizedPath("/about", lang), label: t("nav.about") },
 ];
 

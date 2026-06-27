@@ -1,10 +1,10 @@
 ---
 import type { Lang } from "../i18n/ui";
 import { useTranslations, formatDate, localizedPath } from "../i18n/utils";
-import { readingTime, type Tutorial } from "../lib/content";
+import { readingTime, type Article } from "../lib/content";
 
 interface Props {
-  post: Tutorial;
+  post: Article;
   lang: Lang;
 }
 const { post, lang } = Astro.props;
@@ -14,7 +14,7 @@ const minutes = readingTime(post.body);
 
 <article>
   <a
-    href={localizedPath("/tutorials", lang)}
+    href={localizedPath("/articles", lang)}
     class="font-mono text-sm text-brand-600 hover:underline dark:text-brand-400"
   >
     ← {t("post.back")}

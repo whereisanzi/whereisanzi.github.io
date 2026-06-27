@@ -1,15 +1,15 @@
 ---
 import type { Lang } from "../i18n/ui";
 import { formatDate, localizedPath } from "../i18n/utils";
-import { postSlug, type Tutorial } from "../lib/content";
+import { postSlug, type Article } from "../lib/content";
 
 interface Props {
-  post: Tutorial;
+  post: Article;
   lang: Lang;
 }
 
 const { post, lang } = Astro.props;
-const href = localizedPath(`/tutorials/${postSlug(post)}`, lang);
+const href = localizedPath(`/articles/${postSlug(post)}`, lang);
 ---
 
 <article class="group">

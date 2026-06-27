@@ -2,13 +2,13 @@
 import { render } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Post from "../../../sections/Post.astro";
-import { getTutorials, postSlug } from "../../../lib/content";
+import { getArticles, postSlug } from "../../../lib/content";
 import { languages, type Lang } from "../../../i18n/ui";
 
 export async function getStaticPaths() {
   const paths = [];
   for (const lang of Object.keys(languages) as Lang[]) {
-    const posts = await getTutorials(lang);
+    const posts = await getArticles(lang);
     for (const post of posts) {
       paths.push({
         params: { lang, slug: postSlug(post) },

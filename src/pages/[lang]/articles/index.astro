@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Tutorials from "../../../sections/Tutorials.astro";
+import Articles from "../../../sections/Articles.astro";
 import { useTranslations } from "../../../i18n/utils";
 import { languages, type Lang } from "../../../i18n/ui";
 
@@ -12,6 +12,6 @@ const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
 ---
 
-<BaseLayout title={t("tutorials.title")} description={t("tutorials.subtitle")}>
-  <Tutorials lang={lang} />
+<BaseLayout title={t("articles.title")} description={t("articles.subtitle")}>
+  <Articles lang={lang} />
 </BaseLayout>

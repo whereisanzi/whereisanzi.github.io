@@ -8,11 +8,11 @@ tags: ["meta"]
 
 Bem-vindo ao **whereisanzi**, mais um blog de tecnologia.
 
-Criei este espaço para ter um lugar tranquilo onde anotar o que aprendo construindo software. Sem newsletter, sem popup, só notas e tutoriais.
+Criei este espaço para ter um lugar tranquilo onde anotar o que aprendo construindo software. Sem newsletter, sem popup, só notas e artigos.
 
 ## O que você encontra aqui
 
-- Tutoriais curtos e práticos que eu queria ter achado quando travei.
+- Artigos curtos e práticos que eu queria ter achado quando travei.
 - Anotações sobre ferramentas, linguagens e padrões que uso no dia a dia.
 - De vez em quando, o relato de algo que quebrei e como consertei.
 
