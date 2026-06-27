@@ -7,11 +7,15 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://whereisanzi.github.io",
   integrations: [sitemap()],
+  redirects: {
+    "/": "/en-us/",
+  },
   i18n: {
-    locales: ["en", "pt"],
-    defaultLocale: "en",
+    locales: ["en-us", "pt-br"],
+    defaultLocale: "en-us",
     routing: {
-      prefixDefaultLocale: false,
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: true,
     },
   },
   vite: {

@@ -8,13 +8,13 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const body = {
-  en: [
+const body: Record<Lang, string[]> = {
+  "en-us": [
     "I'm Anzi, a software engineer who likes building things for the web and writing about what I learn.",
     "This blog is where I keep tutorials, notes and write-ups, mostly so future me can find them again, and maybe they help you too.",
     "Everything here is open source. Found a typo or have a suggestion? Pull requests are welcome.",
   ],
-  pt: [
+  "pt-br": [
     "Eu sou o Anzi, engenheiro de software que gosta de construir coisas para a web e escrever sobre o que aprende.",
     "Este blog é onde guardo tutoriais, anotações e write-ups, principalmente para o meu eu do futuro reencontrar, e quem sabe ajudar você também.",
     "Tudo aqui é código aberto. Achou um erro ou tem uma sugestão? Pull requests são bem-vindos.",

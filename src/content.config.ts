@@ -8,7 +8,7 @@ const tutorials = defineCollection({
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    lang: z.enum(["en", "pt"]),
+    lang: z.enum(["en-us", "pt-br"]),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),

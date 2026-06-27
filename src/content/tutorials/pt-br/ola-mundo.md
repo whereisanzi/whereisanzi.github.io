@@ -2,7 +2,7 @@
 title: "Olá, mundo"
 description: "Por que este blog existe e o que você vai encontrar por aqui."
 pubDate: 2026-06-20
-lang: "pt"
+lang: "pt-br"
 tags: ["meta"]
 ---
 
@@ -24,7 +24,7 @@ Este site é estático, feito com [Astro](https://astro.build) e Tailwind CSS. O
 // cada post é só um arquivo markdown com frontmatter
 const post = {
   title: "Olá, mundo",
-  lang: "pt",
+  lang: "pt-br",
   tags: ["meta"],
 };
 ```

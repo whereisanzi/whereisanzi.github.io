@@ -2,7 +2,7 @@
 title: "Hello, world"
 description: "Why this blog exists and what you can expect to find here."
 pubDate: 2026-06-20
-lang: "en"
+lang: "en-us"
 tags: ["meta"]
 ---
 
@@ -24,7 +24,7 @@ This site is a static site made with [Astro](https://astro.build) and Tailwind C
 // every post is just a markdown file with frontmatter
 const post = {
   title: "Hello, world",
-  lang: "en",
+  lang: "en-us",
   tags: ["meta"],
 };
 ```

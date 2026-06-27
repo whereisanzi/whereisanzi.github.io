@@ -13,11 +13,12 @@ const links = [
   { href: localizedPath("/about", lang), label: t("nav.about") },
 ];
 
+const homeHref = localizedPath("/", lang).replace(/\/$/, "");
+
 function isActive(href: string) {
   const h = href.replace(/\/$/, "") || "/";
-  if (h === localizedPath("/", lang).replace(/\/$/, "") || "/") {
-    return current === h;
-  }
+  // The home link should only match the exact home path, not every sub-route.
+  if (h === homeHref) return current === h;
   return current === h || current.startsWith(h + "/");
 }
 ---

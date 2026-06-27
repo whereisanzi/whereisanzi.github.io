@@ -3,21 +3,29 @@ import { render } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Post from "../../../sections/Post.astro";
 import { getTutorials, postSlug } from "../../../lib/content";
+import { languages, type Lang } from "../../../i18n/ui";
 
 export async function getStaticPaths() {
-  const posts = await getTutorials("pt");
-  return posts.map((post) => ({
-    params: { slug: postSlug(post) },
-    props: { post },
-  }));
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    const posts = await getTutorials(lang);
+    for (const post of posts) {
+      paths.push({
+        params: { lang, slug: postSlug(post) },
+        props: { post },
+      });
+    }
+  }
+  return paths;
 }
 
+const lang = Astro.params.lang as Lang;
 const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <Post post={post} lang="pt">
+  <Post post={post} lang={lang}>
     <Content />
   </Post>
 </BaseLayout>

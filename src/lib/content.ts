@@ -5,7 +5,7 @@ export type Tutorial = CollectionEntry<"tutorials">;
 
 /** The clean slug for a post, with its `en/` or `pt/` folder prefix removed. */
 export function postSlug(entry: Tutorial): string {
-  return entry.id.replace(/^(en|pt)\//, "");
+  return entry.id.replace(/^(en-us|pt-br)\//, "");
 }
 
 /** Estimate reading time in minutes from the raw markdown body. */

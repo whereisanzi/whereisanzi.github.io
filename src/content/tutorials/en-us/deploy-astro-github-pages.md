@@ -2,7 +2,7 @@
 title: "Deploy an Astro site to GitHub Pages"
 description: "A minimal GitHub Actions workflow that builds and ships your Astro site on every push."
 pubDate: 2026-06-25
-lang: "en"
+lang: "en-us"
 tags: ["astro", "ci"]
 ---
 

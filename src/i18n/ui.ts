@@ -1,14 +1,14 @@
 export const languages = {
-  en: "English",
-  pt: "Português",
+  "en-us": "English",
+  "pt-br": "Português",
 } as const;
 
-export const defaultLang = "en";
+export const defaultLang = "en-us";
 
 export type Lang = keyof typeof languages;
 
 export const ui = {
-  en: {
+  "en-us": {
     "site.title": "whereisanzi",
     "site.tagline": "yet another tech blog",
     "site.description":
@@ -35,7 +35,7 @@ export const ui = {
     "notfound.text": "The page you're looking for doesn't exist.",
     "notfound.home": "Go home",
   },
-  pt: {
+  "pt-br": {
     "site.title": "whereisanzi",
     "site.tagline": "mais um blog de tecnologia",
     "site.description":

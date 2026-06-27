@@ -6,13 +6,12 @@ export async function GET(context) {
   const items = all
     .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
     .map((post) => {
-      const slug = post.id.replace(/^(en|pt)\//, "");
-      const prefix = post.data.lang === "pt" ? "/pt" : "";
+      const slug = post.id.replace(/^(en-us|pt-br)\//, "");
       return {
         title: post.data.title,
         description: post.data.description,
         pubDate: post.data.pubDate,
-        link: `${prefix}/tutorials/${slug}/`,
+        link: `/${post.data.lang}/tutorials/${slug}/`,
         categories: post.data.tags,
       };
     });
