@@ -9,18 +9,8 @@
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Roboto Mono Variable", ui-monospace, monospace;
 
-  --color-background-dark: #262626;
-
-  --color-brand-50: #eef7ff;
-  --color-brand-100: #d9edff;
-  --color-brand-200: #bce0ff;
-  --color-brand-300: #8eccff;
-  --color-brand-400: #59afff;
-  --color-brand-500: #338dff;
-  --color-brand-600: #1c6cf5;
-  --color-brand-700: #1556e1;
-  --color-brand-800: #1846b6;
-  --color-brand-900: #1a3f8f;
+  /* Warm near-black used across maracatu.org, not pure black. */
+  --color-background-dark: #212121;
 }
 
 html {
@@ -32,7 +22,7 @@ html {
   transition: none !important;
 }
 
-/* Article (markdown) typography */
+/* Article (markdown) typography: monochrome, zinc-based */
 .prose {
   line-height: 1.75;
 }
@@ -53,27 +43,35 @@ html {
   margin-bottom: 0.4em;
 }
 .prose a {
-  color: var(--color-brand-600);
+  color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
+  text-decoration-color: rgba(113, 113, 122, 0.5); /* zinc-500 @ 50% */
 }
-.dark .prose a {
-  color: var(--color-brand-400);
+.prose a:hover {
+  text-decoration-color: currentColor;
 }
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.875em;
-  background: rgba(127, 127, 127, 0.15);
+  background: #f4f4f4;
   padding: 0.15em 0.4em;
   border-radius: 0.3em;
 }
+.dark .prose code {
+  background: #2f2f2f;
+}
 .prose pre {
   font-family: var(--font-mono);
+  background: #f4f4f4;
   padding: 1rem 1.15rem;
-  border-radius: 0.6rem;
+  border-radius: 0.75rem;
   overflow-x: auto;
   font-size: 0.875rem;
   line-height: 1.6;
+}
+.dark .prose pre {
+  background: #2f2f2f;
 }
 .prose pre code {
   background: transparent;
@@ -88,8 +86,33 @@ html {
   padding-left: 1.4em;
 }
 .prose blockquote {
-  border-left: 3px solid var(--color-brand-500);
+  border-left: 3px solid #d4d4d8; /* zinc-300 */
   padding-left: 1rem;
   font-style: italic;
   opacity: 0.85;
+}
+.dark .prose blockquote {
+  border-left-color: #3f3f46; /* zinc-700 */
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.prose th,
+.prose td {
+  border: 1px solid #e4e4e7; /* zinc-200 */
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.dark .prose th,
+.dark .prose td {
+  border-color: #3f3f46; /* zinc-700 */
+}
+.prose th {
+  font-weight: 600;
+  background: #fafafa;
+}
+.dark .prose th {
+  background: #2a2a2a;
 }

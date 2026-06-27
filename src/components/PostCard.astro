@@ -14,7 +14,7 @@ const href = localizedPath(`/articles/${postSlug(post)}`, lang);
 
 <article class="group">
   <a href={href} class="block rounded-xl py-4 transition-colors">
-    <div class="flex items-center gap-2 font-mono text-xs text-gray-500 dark:text-gray-400">
+    <div class="flex items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">
       <time datetime={post.data.pubDate.toISOString()}>
         {formatDate(post.data.pubDate, lang)}
       </time>
@@ -22,7 +22,7 @@ const href = localizedPath(`/articles/${postSlug(post)}`, lang);
         post.data.tags.length > 0 && (
           <>
             <span>·</span>
-            <span class="text-brand-600 dark:text-brand-400">
+            <span>
               {post.data.tags.slice(0, 2).map((tag) => `#${tag}`).join(" ")}
             </span>
           </>
@@ -30,11 +30,11 @@ const href = localizedPath(`/articles/${postSlug(post)}`, lang);
       }
     </div>
     <h3
-      class="mt-1 text-lg font-semibold tracking-tight text-gray-900 transition-colors group-hover:text-brand-600 dark:text-white dark:group-hover:text-brand-400"
+      class="mt-1 text-lg font-semibold tracking-tight text-zinc-900 decoration-zinc-300 underline-offset-4 group-hover:underline dark:text-white dark:decoration-zinc-600"
     >
       {post.data.title}
     </h3>
-    <p class="mt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+    <p class="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
       {post.data.description}
     </p>
   </a>

@@ -13,27 +13,27 @@ const posts = (await getArticles(lang)).slice(0, 5);
 ---
 
 <section class="pb-10">
-  <p class="font-mono text-sm text-brand-600 dark:text-brand-400">
+  <p class="font-mono text-sm text-zinc-500 dark:text-zinc-400">
     {t("site.tagline")}
   </p>
   <h1
-    class="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+    class="mt-2 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl"
   >
-    {t("site.title")}<span class="text-brand-500">.</span>
+    {t("site.title")}<span class="text-zinc-300 dark:text-zinc-600">.</span>
   </h1>
-  <p class="mt-4 max-w-2xl text-base leading-relaxed text-gray-600 dark:text-gray-300">
+  <p class="mt-4 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
     {t("home.intro")}
   </p>
 </section>
 
 <section>
   <div class="flex items-baseline justify-between">
-    <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+    <h2 class="text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
       {t("home.latest")}
     </h2>
     <a
       href={localizedPath("/articles", lang)}
-      class="font-mono text-xs text-brand-600 hover:underline dark:text-brand-400"
+      class="font-mono text-xs text-zinc-900 hover:underline dark:text-white"
     >
       {t("home.viewAll")} →
     </a>
@@ -41,9 +41,9 @@ const posts = (await getArticles(lang)).slice(0, 5);
 
   {
     posts.length === 0 ? (
-      <p class="mt-6 text-gray-500 dark:text-gray-400">{t("articles.empty")}</p>
+      <p class="mt-6 text-zinc-500 dark:text-zinc-400">{t("articles.empty")}</p>
     ) : (
-      <div class="mt-2 divide-y divide-gray-100 dark:divide-white/5">
+      <div class="mt-2 divide-y divide-zinc-100 dark:divide-white/5">
         {posts.map((post) => (
           <PostCard post={post} lang={lang} />
         ))}
