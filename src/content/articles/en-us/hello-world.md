@@ -6,7 +6,7 @@ lang: "en-us"
 tags: ["meta"]
 ---
 
-Welcome to **whereisanzi**, yet another tech blog.
+Welcome to **whereisanzi**, where I break things on purpose and write down why.
 
 I built this to have a calm place to write down what I learn while building software. No newsletters, no popups, just notes and articles.
 

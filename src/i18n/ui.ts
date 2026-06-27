@@ -10,7 +10,7 @@ export type Lang = keyof typeof languages;
 export const ui = {
   "en-us": {
     "site.title": "whereisanzi",
-    "site.tagline": "yet another tech blog",
+    "site.tagline": "breaking things on purpose, writing down why",
     "site.description":
       "Articles, notes and write-ups on software, web and whatever I'm learning.",
     "nav.home": "Home",
@@ -37,7 +37,7 @@ export const ui = {
   },
   "pt-br": {
     "site.title": "whereisanzi",
-    "site.tagline": "mais um blog de tecnologia",
+    "site.tagline": "quebrando coisas de propósito, e anotando o porquê",
     "site.description":
       "Artigos, anotações e write-ups sobre software, web e o que eu estiver aprendendo.",
     "nav.home": "Início",

@@ -6,7 +6,7 @@ lang: "pt-br"
 tags: ["meta"]
 ---
 
-Bem-vindo ao **whereisanzi**, mais um blog de tecnologia.
+Bem-vindo ao **whereisanzi**, onde eu quebro coisas de propósito e anoto o porquê.
 
 Criei este espaço para ter um lugar tranquilo onde anotar o que aprendo construindo software. Sem newsletter, sem popup, só notas e artigos.
 

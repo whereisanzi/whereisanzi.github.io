@@ -17,7 +17,7 @@ export async function GET(context) {
     });
 
   return rss({
-    title: "whereisanzi · yet another tech blog",
+    title: "whereisanzi · breaking things on purpose, writing down why",
     description:
       "Articles, notes and write-ups on software, web and whatever I'm learning.",
     site: context.site,
