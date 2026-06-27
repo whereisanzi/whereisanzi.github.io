@@ -19,7 +19,7 @@ export async function GET(context) {
   return rss({
     title: "whereisanzi · breaking things on purpose, writing down why",
     description:
-      "Articles, notes and write-ups on software, web and whatever I'm learning.",
+      "Articles and notes on training small LLMs, low-level systems and civic AI, from Brazil.",
     site: context.site,
     items,
   });

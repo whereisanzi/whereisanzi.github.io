@@ -10,19 +10,65 @@ const t = useTranslations(lang);
 
 const body: Record<Lang, string[]> = {
   "en-us": [
-    "I'm Anzi, a software engineer who likes building things for the web and writing about what I learn.",
-    "This blog is where I keep articles, notes and write-ups, mostly so future me can find them again, and maybe they help you too.",
-    "Everything here is open source. Found a typo or have a suggestion? Pull requests are welcome.",
+    "I'm Anderson Anzileiro (anzi), a software engineer who likes building systems from the metal up and training small language models. I've spent over a decade shipping software, including time at Nubank and as a Staff Engineer at Stone, and founding a startup along the way.",
+    "These days most of my energy goes into Maracatu, an open-source initiative from Brazil working on foundation models, civic AI and network infrastructure. I train open-weight Brazilian Portuguese LLMs from scratch, write low-level systems in Rust, and build tools that put public data within everyone's reach.",
+    "This blog is where I keep articles, notes and write-ups about that work, mostly so future me can find them again, and maybe they help you too. Everything here is open source.",
   ],
   "pt-br": [
-    "Eu sou o Anzi, engenheiro de software que gosta de construir coisas para a web e escrever sobre o que aprende.",
-    "Este blog é onde guardo artigos, anotações e write-ups, principalmente para o meu eu do futuro reencontrar, e quem sabe ajudar você também.",
-    "Tudo aqui é código aberto. Achou um erro ou tem uma sugestão? Pull requests são bem-vindos.",
+    "Eu sou o Anderson Anzileiro (anzi), engenheiro de software que gosta de construir sistemas desde o metal e treinar modelos de linguagem pequenos. Passei mais de uma década entregando software, incluindo uma temporada no Nubank e como Staff Engineer na Stone, e fundei uma startup pelo caminho.",
+    "Hoje a maior parte da minha energia vai para a Maracatu, uma iniciativa open source brasileira focada em foundation models, IA cívica e infraestrutura de rede. Treino LLMs de português do Brasil com pesos abertos, do zero, escrevo sistemas de baixo nível em Rust e construo ferramentas que colocam dados públicos ao alcance de todo mundo.",
+    "Este blog é onde guardo artigos, anotações e write-ups sobre esse trabalho, principalmente para o meu eu do futuro reencontrar, e quem sabe ajudar você também. Tudo aqui é código aberto.",
   ],
 };
 
+const projectsHeading = {
+  "en-us": "What I'm building",
+  "pt-br": "No que estou trabalhando",
+};
+
+const projects = [
+  {
+    name: "Maracatu",
+    href: "https://maracatu.org",
+    desc: {
+      "en-us": "Open-weight Brazilian Portuguese LLMs, trained from scratch.",
+      "pt-br": "LLMs de português do Brasil com pesos abertos, treinados do zero.",
+    },
+  },
+  {
+    name: "Calunga",
+    href: "https://github.com/maracatu-org/calunga",
+    desc: {
+      "en-us": "Civic AI: chat and RAG over Brazilian public spending data.",
+      "pt-br": "IA cívica: chat e RAG sobre os gastos públicos brasileiros.",
+    },
+  },
+  {
+    name: "catraca",
+    href: "https://github.com/maracatu-org/catraca",
+    desc: {
+      "en-us":
+        "Single-host TCP dispatcher in Rust: io_uring AcceptMulti and SCM_RIGHTS fd handoff.",
+      "pt-br":
+        "Dispatcher TCP em Rust: io_uring AcceptMulti e handoff de fd via SCM_RIGHTS.",
+    },
+  },
+  {
+    name: "TAG",
+    href: "https://github.com/whereisanzi/tag",
+    desc: {
+      "en-us":
+        "A domain-centric, functional software architecture for consistent services.",
+      "pt-br":
+        "Uma arquitetura de software funcional e centrada em domínio para serviços consistentes.",
+    },
+  },
+];
+
 const links = [
   { label: "GitHub", href: "https://github.com/whereisanzi" },
+  { label: "Maracatu", href: "https://maracatu.org" },
+  { label: "Hugging Face", href: "https://huggingface.co/maracatu-labs" },
   { label: "RSS", href: "/rss.xml" },
 ];
 ---
@@ -33,7 +79,28 @@ const links = [
   </h1>
   {body[lang].map((p) => <p>{p}</p>)}
 
-  <div class="not-prose mt-8 flex flex-wrap gap-3">
+  <h2 class="not-prose mt-10 text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+    {projectsHeading[lang]}
+  </h2>
+  <ul class="not-prose mt-4 space-y-4">
+    {
+      projects.map((project) => (
+        <li>
+          <a
+            href={project.href}
+            class="font-mono text-base font-semibold text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+          >
+            {project.name}
+          </a>
+          <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
+            {project.desc[lang]}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="not-prose mt-10 flex flex-wrap gap-3">
     {
       links.map((link) => (
         <a

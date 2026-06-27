@@ -12,13 +12,13 @@ export const ui = {
     "site.title": "whereisanzi",
     "site.tagline": "breaking things on purpose, writing down why",
     "site.description":
-      "Articles, notes and write-ups on software, web and whatever I'm learning.",
+      "Articles and notes on training small LLMs, low-level systems and civic AI, from Brazil.",
     "nav.home": "Home",
     "nav.articles": "Articles",
     "nav.about": "About",
     "home.latest": "Latest articles",
     "home.intro":
-      "Hey, I'm Anzi. I write articles and notes about software engineering, the web and the things I break along the way.",
+      "Hey, I'm anzi. I engineer systems from the metal up and train small language models. I write here about building open-weight LLMs, low-level systems in Rust and civic AI, from Brazil.",
     "home.viewAll": "View all articles",
     "articles.title": "Articles",
     "articles.subtitle": "Everything I've written, newest first.",
@@ -39,13 +39,13 @@ export const ui = {
     "site.title": "whereisanzi",
     "site.tagline": "quebrando coisas de propósito, e anotando o porquê",
     "site.description":
-      "Artigos, anotações e write-ups sobre software, web e o que eu estiver aprendendo.",
+      "Artigos e anotações sobre treinar LLMs pequenos, sistemas de baixo nível e IA cívica, daqui do Brasil.",
     "nav.home": "Início",
     "nav.articles": "Artigos",
     "nav.about": "Sobre",
     "home.latest": "Artigos recentes",
     "home.intro":
-      "Olá, eu sou o Anzi. Escrevo artigos e anotações sobre engenharia de software, web e as coisas que quebro pelo caminho.",
+      "Olá, eu sou o anzi. Construo sistemas desde o metal e treino modelos de linguagem pequenos. Escrevo aqui sobre LLMs de pesos abertos, sistemas de baixo nível em Rust e IA cívica, daqui do Brasil.",
     "home.viewAll": "Ver todos os artigos",
     "articles.title": "Artigos",
     "articles.subtitle": "Tudo que escrevi, do mais novo ao mais antigo.",
