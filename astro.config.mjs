@@ -7,6 +7,18 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://whereisanzi.github.io",
   integrations: [sitemap()],
+  markdown: {
+    shikiConfig: {
+      // Dual themes: light and dark vars are emitted, CSS switches them with
+      // the `.dark` class on <html> (see src/styles/global.css).
+      themes: {
+        light: "vitesse-light",
+        dark: "vitesse-dark",
+      },
+      defaultColor: false,
+      wrap: false,
+    },
+  },
   redirects: {
     "/": "/en-us/",
   },

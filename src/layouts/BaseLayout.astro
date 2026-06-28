@@ -84,5 +84,77 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer />
+
+    <script>
+      const CLIP =
+        '<svg class="clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185.64-.075 1.281-.136 1.927-.184"/></svg>';
+      const CHECK =
+        '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>';
+
+      function enhanceCodeBlocks() {
+        const pt = (document.documentElement.lang || "").startsWith("pt");
+        const COPY = pt ? "Copiar" : "Copy";
+        const COPIED = pt ? "Copiado" : "Copied";
+
+        document.querySelectorAll(".prose pre.astro-code").forEach((pre) => {
+          if (pre.parentElement?.classList.contains("code-block")) return;
+
+          const raw = pre.getAttribute("data-language") || "code";
+          const lang = ["plaintext", "plain", "text", "ansi"].includes(raw)
+            ? "text"
+            : raw;
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "code-block";
+
+          const bar = document.createElement("div");
+          bar.className = "code-block__bar";
+
+          const langEl = document.createElement("span");
+          langEl.className = "code-block__lang";
+          langEl.textContent = lang;
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "code-block__copy";
+          btn.setAttribute("aria-label", COPY);
+          const label = document.createElement("span");
+          label.textContent = COPY;
+          btn.innerHTML = CLIP + CHECK;
+          btn.appendChild(label);
+
+          let timer;
+          btn.addEventListener("click", async () => {
+            const code = pre.querySelector("code");
+            const text = code ? code.innerText : pre.innerText;
+            try {
+              await navigator.clipboard.writeText(text);
+            } catch {
+              const ta = document.createElement("textarea");
+              ta.value = text;
+              ta.style.position = "fixed";
+              ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand("copy");
+              ta.remove();
+            }
+            btn.setAttribute("data-copied", "true");
+            label.textContent = COPIED;
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              btn.removeAttribute("data-copied");
+              label.textContent = COPY;
+            }, 1600);
+          });
+
+          bar.append(langEl, btn);
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.append(bar, pre);
+        });
+      }
+
+      enhanceCodeBlocks();
+    </script>
   </body>
 </html>

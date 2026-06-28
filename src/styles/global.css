@@ -52,31 +52,119 @@ html {
 .prose a:hover {
   text-decoration-color: currentColor;
 }
-.prose code {
+/* Inline code only (fenced blocks are handled by Shiki below) */
+.prose :not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.875em;
   background: #f4f4f4;
   padding: 0.15em 0.4em;
   border-radius: 0.3em;
 }
-.dark .prose code {
+.dark .prose :not(pre) > code {
   background: #2f2f2f;
 }
-.prose pre {
-  font-family: var(--font-mono);
-  background: #f4f4f4;
+
+/* Fenced code blocks: Shiki dual themes (defaultColor:false emits CSS vars) */
+.prose pre.astro-code {
+  margin: 0;
   padding: 1rem 1.15rem;
-  border-radius: 0.75rem;
+  border-radius: 0;
   overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.6;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  background-color: var(--shiki-light-bg);
+  color: var(--shiki-light);
 }
-.dark .prose pre {
-  background: #2f2f2f;
+.prose pre.astro-code span {
+  color: var(--shiki-light);
 }
-.prose pre code {
+.dark .prose pre.astro-code {
+  background-color: var(--shiki-dark-bg);
+  color: var(--shiki-dark);
+}
+.dark .prose pre.astro-code span {
+  color: var(--shiki-dark);
+}
+.prose pre.astro-code code {
   background: transparent;
   padding: 0;
+  font-size: inherit;
+  counter-reset: none;
+}
+
+/* Wrapper added by the enhancer script: border, radius, top bar */
+.code-block {
+  margin: 1.5em 0;
+  border: 1px solid #e4e4e7; /* zinc-200 */
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: var(--shiki-light-bg, #fafafa);
+}
+.dark .code-block {
+  border-color: #3f3f46; /* zinc-700 */
+  background-color: var(--shiki-dark-bg, #1a1a1a);
+}
+.code-block__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem 0.35rem 0.95rem;
+  border-bottom: 1px solid #e4e4e7;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.dark .code-block__bar {
+  border-bottom-color: #3f3f46;
+}
+.code-block__lang {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a1a1aa; /* zinc-400 */
+}
+.code-block__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: #71717a; /* zinc-500 */
+  font: inherit;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+.code-block__copy:hover {
+  color: #18181b; /* zinc-900 */
+  background: #f4f4f5; /* zinc-100 */
+}
+.dark .code-block__copy:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+.code-block__copy svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+.code-block__copy .check {
+  display: none;
+}
+.code-block__copy[data-copied="true"] .check {
+  display: inline;
+}
+.code-block__copy[data-copied="true"] .clip {
+  display: none;
+}
+.code-block__copy[data-copied="true"] {
+  color: #18181b;
+}
+.dark .code-block__copy[data-copied="true"] {
+  color: #ffffff;
 }
 .prose ul {
   list-style: disc;
