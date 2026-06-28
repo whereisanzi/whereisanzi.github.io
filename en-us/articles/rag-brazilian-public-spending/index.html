@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en-us" class="no-transitions scroll-pt-20"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.18.2"><title>RAG over Brazil&#39;s public spending: the architecture of Calunga · whereisanzi</title><meta name="description" content="How I built a chat plus RAG agent that answers plain-Portuguese questions about Brazilian public spending, grounded in real data and links to official sources."><link rel="canonical" href="https://whereisanzi.github.io/en-us/articles/rag-brazilian-public-spending/"><link rel="alternate" type="application/rss+xml" title="whereisanzi" href="https://whereisanzi.github.io/rss.xml"><meta property="og:type" content="website"><meta property="og:title" content="RAG over Brazil's public spending: the architecture of Calunga · whereisanzi"><meta property="og:description" content="How I built a chat plus RAG agent that answers plain-Portuguese questions about Brazilian public spending, grounded in real data and links to official sources."><meta property="og:url" content="https://whereisanzi.github.io/en-us/articles/rag-brazilian-public-spending/"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#212121" media="(prefers-color-scheme: dark)"><script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        if (theme === "dark" || (!theme && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+        window.addEventListener("load", function () {
+          document.documentElement.classList.remove("no-transitions");
+        });
+      })();
+    </script><link rel="stylesheet" href="/_astro/about.DjC_BGgh.css"></head> <body class="min-h-screen bg-white font-sans text-zinc-900 antialiased dark:bg-background-dark dark:text-zinc-100"> <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-black focus:px-4 focus:py-2 focus:text-white dark:focus:bg-white dark:focus:text-black">
+Skip to content
+</a> <header class="sticky top-0 z-40 border-b border-zinc-100 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-background-dark/80"> <div class="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6"> <a href="/en-us" class="flex items-center gap-2.5" aria-label="whereisanzi"> <span class="grid size-7 place-items-center rounded-full bg-black text-xs font-bold text-white dark:bg-white dark:text-black">
+a
+</span> <span class="text-lg font-semibold tracking-tight text-zinc-800 dark:text-zinc-200"> whereisanzi </span> </a> <nav class="flex items-center gap-1"> <a href="/en-us" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"> Home </a><a href="/en-us/articles" aria-current="page" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-900 dark:text-white"> Articles </a><a href="/en-us/about" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"> About </a> <span class="mx-1 h-5 w-px bg-zinc-200 dark:bg-zinc-700"></span> <a href="/pt-br/articles/rag-brazilian-public-spending" aria-label="Switch language" title="Switch language" class="grid h-9 min-w-9 place-items-center rounded-lg px-2 font-mono text-xs font-semibold uppercase text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"> PT </a> <button id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode" class="grid size-9 place-items-center rounded-lg text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"> <svg class="size-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"></path> </svg> <svg class="hidden size-5 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"> <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path> </svg> </button> <script type="module">const t=document.getElementById("theme-toggle");t?.addEventListener("click",()=>{const e=document.documentElement.classList.toggle("dark");localStorage.setItem("theme",e?"dark":"light")});</script> </nav> </div> </header> <main id="main" class="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">  <article> <a href="/en-us/articles" class="font-mono text-sm text-zinc-900 hover:underline dark:text-white">
+← Back to articles </a> <header class="mt-6"> <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400"> <time datetime="2026-06-23T00:00:00.000Z"> June 22, 2026 </time> <span>·</span> <span>10 min read</span>  <span>·</span> <span class="text-zinc-900 dark:text-white"> #rag #ai #calunga </span>  </div> <h1 class="mt-3 text-3xl font-bold leading-tight tracking-tight text-zinc-900 dark:text-white sm:text-4xl"> RAG over Brazil&#39;s public spending: the architecture of Calunga </h1> <p class="mt-3 text-lg text-zinc-600 dark:text-zinc-400"> How I built a chat plus RAG agent that answers plain-Portuguese questions about Brazilian public spending, grounded in real data and links to official sources. </p> </header> <div class="prose mt-10 max-w-none text-zinc-700 dark:text-zinc-300">  <p>The data about Brazilian public spending is already public and already open. That is not the problem. The problem is that it sits across dozens of portals, in incompatible formats, behind bureaucratic language, with one CSV here and a paginated JSON API there. Open data only becomes oversight when a citizen can actually ask a question and trust the answer.</p>
+<p><strong>Calunga</strong> is my attempt to close that gap. It is a chat plus RAG product: an AI agent that reasons over public data with tools and semantic search, then answers in plain Portuguese with the numbers and links back to the official source. It is part of the larger Maracatu project, and every component is named after an element of the Pernambuco “maracatu”, the cultural manifestation that gives the initiative its name.</p>
+<h2 id="what-you-can-ask">What you can ask</h2>
+<p>The whole thing earns its keep on questions like these:</p>
+<pre class="astro-code astro-code-themes vitesse-light vitesse-dark" style="--shiki-light:#393a34;--shiki-dark:#dbd7caee;--shiki-light-bg:#ffffff;--shiki-dark-bg:#121212; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>"quanto o deputado X gastou com cota parlamentar em 2025?"</span></span>
+<span class="line"><span>"a empresa que ganhou esse contrato federal está com a situação regular?"</span></span>
+<span class="line"><span>"quem votou contra o PL 3802/2024 no Senado?"</span></span>
+<span class="line"><span>"quais empresas mais receberam em contratos federais este ano?"</span></span></code></pre>
+<p>Each of those touches a different dataset, and the honest answer always carries a citation. That last constraint, citation or nothing, shaped almost every decision below.</p>
+<h2 id="the-components">The components</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Name</th><th>What it is</th><th>Stack</th></tr></thead><tbody><tr><td><strong>Calunga</strong></td><td>the agent</td><td>LangGraph <code>create_react_agent</code>, Gemini 2.5 Flash-Lite</td></tr><tr><td><strong>Baque</strong></td><td>the ingestion pipeline</td><td>Dagster assets, Celery Beat</td></tr><tr><td><strong>Terreiro</strong></td><td>the backend</td><td>FastAPI, asyncpg, raw SQL</td></tr><tr><td><strong>Cortejo</strong></td><td>the frontend</td><td>Next.js 15, React 19, Vercel AI SDK</td></tr><tr><td><strong>Mineiro</strong></td><td>the embeddings service</td><td>BGE-M3, sentence-transformers</td></tr></tbody></table>
+<h2 id="the-agent">The agent</h2>
+<p>There is no hand-rolled graph here. Calunga is LangGraph’s prebuilt <code>create_react_agent</code>, the classic ReAct loop between the LLM and a <code>ToolNode</code>, over the prebuilt <code>MessagesState</code>. I lowered <code>recursion_limit</code> to 8 on purpose: real questions resolve in 1 to 4 iterations, and a long loop just burns tokens and latency for no gain.</p>
+<p>The model is Google <code>gemini-2.5-flash-lite</code> through <code>ChatGoogleGenerativeAI</code>, with <code>max_output_tokens</code> at 4096 and <code>streaming</code> on. I do not set a temperature. There is a model “router” in the code, but I want to be honest about what it is: a tier selector that always returns the cheapest model, flash-lite, with an optional Pro to flash-lite fallback that only fires if Pro is explicitly pinned. It is named like it does something clever; it mostly keeps the bill predictable.</p>
+<h2 id="the-16-tools">The 16 tools</h2>
+<p>The tools are async functions decorated with LangChain’s <code>@tool</code>, each with a Pydantic v2 input schema. Every one returns a JSON string with a <code>mode</code> field in <code>{list, ranking, item, summary, empty, error}</code> and an always-present <code>source</code>. (The README says 14, but the code’s <code>ALL_TOOLS</code> list has 16. Trust the code.)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tool</th><th>What it answers</th></tr></thead><tbody><tr><td><code>buscar_despesas</code></td><td>parliamentary expenses (CEAP): how much a deputy or senator spent</td></tr><tr><td><code>ranking_despesas</code></td><td>ranking of the biggest spenders, filtered by senador or deputado</td></tr><tr><td><code>listar_parlamentares</code></td><td>deputies and senators by type, state, party, name</td></tr><tr><td><code>listar_executivos</code></td><td>governors of the 27 states, mayors of the 27 capitals, the president (from TSE)</td></tr><tr><td><code>buscar_empresa</code></td><td>company by CNPJ: legal name, status, CNAE, address, sanctions</td></tr><tr><td><code>buscar_similar</code></td><td>free-text semantic search across all bases (the RAG tool)</td></tr><tr><td><code>explicar_termo</code></td><td>glossary of fiscal terms (LOA, LDO, PPA, RCL, CEAP, CPGF, Emenda Pix), itself RAG</td></tr><tr><td><code>buscar_cpgf</code></td><td>federal corporate card (CPGF) spending</td></tr><tr><td><code>buscar_contratos</code></td><td>federal contracts, with <code>group_by</code> for “which companies receive the most”</td></tr><tr><td><code>buscar_viagens</code></td><td>official paid travel</td></tr><tr><td><code>buscar_emendas</code></td><td>parliamentary amendments and execution (Pix amendments, secret budget)</td></tr><tr><td><code>buscar_dados_fiscais</code></td><td>state and capital fiscal data (RREO and RGF from SICONFI)</td></tr><tr><td><code>buscar_despesas_federais</code></td><td>federal budget execution (commitments, settlements, payments) by agency</td></tr><tr><td><code>buscar_votacoes</code></td><td>roll-call votes in Congress (Câmara and Senado)</td></tr><tr><td><code>consultar_patrimonio_candidato</code></td><td>declared assets of TSE candidates</td></tr><tr><td><code>buscar_noticias</code></td><td>recent web news via Tavily, for current facts not in the structured data</td></tr></tbody></table>
+<h2 id="the-rag-path">The RAG path</h2>
+<p><code>buscar_similar</code> is the free-text retrieval tool. It embeds the query through Mineiro, then calls <code>busca_universal</code> in <code>app/queries/busca_semantica.py</code>.</p>
+<p>The interesting design choice is that the <code>search.embeddings</code> table is polymorphic. One table, <code>embedding vector(1024)</code>, unique on <code>(reference_type, reference_id)</code>, with an HNSW index <code>USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 200)</code>. Search is a single cosine query over everything:</p>
+<pre class="astro-code astro-code-themes vitesse-light vitesse-dark" style="--shiki-light:#393a34;--shiki-dark:#dbd7caee;--shiki-light-bg:#ffffff;--shiki-dark-bg:#121212; overflow-x: auto;" tabindex="0" data-language="sql"><code><span class="line"><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375">SELECT</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> e</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">.</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076">reference_type</span><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375"> AS</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> tipo, </span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076">e</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">.</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076">reference_id</span><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375"> AS</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> referencia_id,</span></span>
+<span class="line"><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91">       1</span><span style="--shiki-light:#AB5959;--shiki-dark:#CB7676"> -</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> (</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076">e</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">.</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076">embedding</span><span style="--shiki-light:#AB5959;--shiki-dark:#CB7676"> &#x3C;=></span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> $</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91">1</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">::</span><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375">vector</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">) </span><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375">AS</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> score</span></span>
+<span class="line"><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375">FROM</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> search</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">.</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076">embeddings</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> e</span></span>
+<span class="line"><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375">ORDER BY</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> e</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">.</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076">embedding</span><span style="--shiki-light:#AB5959;--shiki-dark:#CB7676"> &#x3C;=></span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> $</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91">1</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE">::</span><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375">vector</span></span>
+<span class="line"><span style="--shiki-light:#1E754F;--shiki-dark:#4D9375">LIMIT</span><span style="--shiki-light:#393A34;--shiki-dark:#DBD7CAEE"> $</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91">2</span></span></code></pre>
+<p><code>&#x3C;=></code> is pgvector’s cosine distance operator, and <code>score = 1 - distance</code>. The query over-fetches (<code>limit * 2</code>) and re-ranks, then for each hit does a typed second query to load the real row: <code>despesa</code> to <code>spending.ceap_expenses</code>, <code>contrato</code> to <code>spending.contracts</code>, <code>licitacao</code> to <code>spending.procurements</code>, <code>emenda</code> to <code>spending.amendments</code>, <code>proposicao</code> to <code>legislative.bills</code>, <code>votacao</code> to <code>legislative.voting_sessions</code>, <code>viagem</code> to <code>spending.trips</code>, <code>cpgf</code> to <code>spending.corporate_card_expenses</code>, <code>sancao</code> to <code>companies.sanctions</code>. Only then does it return the top N. The embedding is a fast first pass over a uniform vector space; the structured row is the truth that gets shown.</p>
+<p>There is also a hybrid BM25 plus vector function, <code>busca_hibrida</code>, weighting dense 0.7 and sparse 0.3 with <code>websearch_to_tsquery('portuguese', ...)</code>. It is CEAP-only, though, and the live agent path uses the pure-vector <code>busca_universal</code>. I keep it around, but it is an aside.</p>
+<h3 id="mineiro-and-one-vector-space">Mineiro, and one vector space</h3>
+<p>Mineiro is a standalone FastAPI service running <code>BAAI/bge-m3</code> at <code>EMBEDDING_DIM</code> 1024. It is TEI-compatible: <code>POST /embed</code> with <code>{"inputs": [...]}</code> returns <code>[[...]]</code>, and <code>GET /health</code> returns <code>{status, model, dim, device}</code>. It encodes with sentence-transformers, <code>normalize_embeddings</code> on, <code>batch_size</code> of <code>min(32, n)</code>, and picks its device automatically (cuda, then mps, then cpu), so it runs on Apple MPS for local development.</p>
+<p>The thing that matters: ingestion and query time use the <em>same</em> model. One model means one vector space, so a query vector and a stored document vector are actually comparable. As a bonus, the API image never has to carry the ML stack, because embeddings live in their own service.</p>
+<h2 id="the-data-plane-and-why-session-pooling">The data plane, and why session pooling</h2>
+<p>There are two databases, on purpose. <code>maracatu_app</code> is transactional: auth and chat, schemas <code>auth</code> and <code>chat</code>. <code>maracatu_civic</code> is the large analytical one and the RAG home, schemas <code>reference</code>, <code>legislative</code>, <code>spending</code>, <code>companies</code>, <code>elections</code>, <code>ingestion</code>, <code>search</code>. No cross-database joins. The embeddings live in the civic DB, right next to the rows they reference, which is why the typed re-fetch above is a cheap local lookup. There are four connection roles, <code>app_write</code>, <code>app_read</code>, <code>civic_write</code>, <code>civic_read</code>, with read falling back to write.</p>
+<p>Each database gets its own PgBouncer (<code>pgbouncer-app</code> with <code>MAX_CLIENT_CONN</code> 100, <code>pgbouncer-civic</code> with 200), on <code>edoburu/pgbouncer:v1.23.1-p2</code>, scram-sha-256. The pool mode is <strong>session</strong>, not transaction, and this is the part worth explaining. asyncpg uses server-side prepared statements. Transaction pooling hands you a different backend connection per transaction, so those prepared statements vanish out from under the driver and queries break. Session pooling pins a client to one backend for the life of the connection, which keeps asyncpg happy. It is a real documented constraint, not a preference. Postgres itself is <code>pgvector/pgvector:pg16</code> (I do not pin a specific pgvector version, so I will not claim one).</p>
+<p>Splitting the data plane in two is also blast-radius isolation: a runaway analytical query on civic data cannot starve the pool that serves user login.</p>
+<h2 id="ingestion-and-the-freshness-sla">Ingestion and the freshness SLA</h2>
+<p>Baque is <code>terreiro/pipeline/definitions.py</code>: Dagster software-defined assets, schedules, and sensors. The sources actually implemented in code are Câmara dos Deputados, Senado Federal, Portal da Transparência (sanctions CEIS/CNEP/CEPIM, CPGF, contracts, travel, amendments, federal budget), PNCP (procurement, which replaced the discontinued Transparência <code>/licitacoes</code> endpoint, now returning HTTP 400), Receita Federal (CNPJ bulk, filtered to only supplier CNPJs that already appear in spending, a deliberate memory and scale tradeoff), SICONFI (RREO plus RGF), and TSE (candidates and declared assets). The docs and README also mention TCU and BNDES, but those are not implemented: no services, no assets. I treat them as planned, not live.</p>
+<p>Every run is wrapped and recorded in <code>ingestion.ingestion_log</code> (source, record_type, status, counts, timestamps), with <code>ingestion.raw_ingestion</code> holding JSONB payloads deduped by <code>payload_hash</code>. The embeddings asset batches 32, fetches in 5000-row windows, does <code>INSERT ... ON CONFLICT DO NOTHING</code>, sleeps one second between batches, and stops a window if zero rows embed, which is a guard for Mineiro being down.</p>
+<p>Then there is a daily freshness monitor, <code>monitor_frescor</code>, on cron <code>0 7 * * *</code>. It compares each of 10 sources against a per-source SLA in days (CEAP 45, Votações 7, Contratos 35, CPGF 75, Viagens 45, Emendas 45, Orçamento 35, Licitações 10, SICONFI 75, Sanções 10), classifies each as OK, ATRASADA, or SEM DADO, and raises a Sentry alert (gated on <code>SENTRY_DSN</code>) plus a Dagster WARN asset check. Public data goes stale quietly. A civic tool that answers from stale data is worse than one that admits it does not know yet, so I would rather page myself.</p>
+<h2 id="anti-hallucination-and-the-tse-trick">Anti-hallucination, and the TSE trick</h2>
+<p>Two design points carry more weight than the rest.</p>
+<p>The first is an aggressive system prompt. The model is forbidden to write any URL, profile link, or ID that did not literally come from a tool result. The prompt puts it bluntly: a URL or ID that did not come from a tool return is a hallucination and breaks trust. Markdown links that arrive pre-embedded in tool fields must be preserved verbatim. Political identity, the office someone holds, their party, their link, must come from a tool, never from the model’s memory. For a tool people are meant to fiscalize their government with, a confidently wrong link is the worst possible failure.</p>
+<p>The second is a workaround for stale structured data. TSE returns who was <em>elected</em> in 2022 and 2024, not necessarily who holds office today. People resign, get removed, take leave, move up from vice. So when someone asks who is in office “today” or “right now”, the prompt tells the model to also call <code>buscar_noticias</code> (Tavily) and present both: what the election data says, and what recent news says, each with its source. Structured data for the durable facts, news for the present tense.</p>
+<h2 id="shipping-it-without-opening-ports">Shipping it without opening ports</h2>
+<p>Calunga runs at <a href="https://maracatu.org">maracatu.org</a> on a self-hosted Linux host. Traefik v3.7 routes by container labels, and the only path in from the internet is a Cloudflare Tunnel (<code>cloudflared</code>, outbound only), with TLS terminated at Cloudflare and no inbound ports open on the host at all. The embeddings model runs on a modest consumer GPU on the same machine.</p>
+<p>On the way out, when the chat endpoint <code>POST /v1/conversations</code> streams, Terreiro returns an SSE <code>EventSourceResponse</code>. The stream layer consumes LangGraph’s <code>astream_events</code> v2 and emits typed events (<code>text</code>, <code>tool_start</code>, <code>tool_end</code>, <code>error</code>, <code>[DONE]</code>) plus per-tool metrics, and it persists the assistant message, with a <code>tool_calls</code> JSONB timeline, before its own <code>[DONE]</code>. There are guards before the agent runs: 8000 chars per message (HTTP 413), 60000 chars per request, and a daily quota of 200k input and 50k output tokens per user. The Next.js route in Cortejo proxies to the backend and transcodes the SSE into the Vercel AI SDK v1 data-stream protocol (<code>text</code> to <code>0:</code>, data and tool events to <code>2:</code>, error to <code>3:</code>, done to <code>d:</code>) with the header <code>x-vercel-ai-data-stream: v1</code>, and the frontend renders it with <code>@ai-sdk/react</code>’s <code>useChat</code>.</p>
+<p>The point of all this is not the stack. It is that none of it matters unless a citizen can ask a question and trust the answer that comes back. The code is on <a href="https://github.com/maracatu-org/calunga">GitHub</a>, and you can try it at <a href="https://maracatu.org">maracatu.org</a>.</p>  </div> </article>  </main> <footer class="border-t border-zinc-200/70 dark:border-white/10"> <div class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-zinc-500 dark:text-zinc-400 sm:flex-row sm:px-6"> <p>© 2026 whereisanzi</p> <p> Built with Astro. Source on  <a href="https://github.com/whereisanzi/whereisanzi.github.io" class="font-medium text-zinc-700 underline underline-offset-2 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white">GitHub</a>.
+</p> </div> </footer> <script type="module">const b='<svg class="clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185.64-.075 1.281-.136 1.927-.184"/></svg>',k='<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>';function x(){const r=(document.documentElement.lang||"").startsWith("pt"),c=r?"Copiar":"Copy",p=r?"Copiado":"Copied";document.querySelectorAll(".prose pre.astro-code").forEach(t=>{if(t.parentElement?.classList.contains("code-block"))return;const i=t.getAttribute("data-language")||"code",C=["plaintext","plain","text","ansi"].includes(i)?"text":i,a=document.createElement("div");a.className="code-block";const s=document.createElement("div");s.className="code-block__bar";const l=document.createElement("span");l.className="code-block__lang",l.textContent=C;const e=document.createElement("button");e.type="button",e.className="code-block__copy",e.setAttribute("aria-label",c);const n=document.createElement("span");n.textContent=c,e.innerHTML=b+k,e.appendChild(n);let d;e.addEventListener("click",async()=>{const m=t.querySelector("code"),u=m?m.innerText:t.innerText;try{await navigator.clipboard.writeText(u)}catch{const o=document.createElement("textarea");o.value=u,o.style.position="fixed",o.style.opacity="0",document.body.appendChild(o),o.select(),document.execCommand("copy"),o.remove()}e.setAttribute("data-copied","true"),n.textContent=p,clearTimeout(d),d=setTimeout(()=>{e.removeAttribute("data-copied"),n.textContent=c},1600)}),s.append(l,e),t.parentNode.insertBefore(a,t),a.append(s,t)})}x();</script> </body> </html>

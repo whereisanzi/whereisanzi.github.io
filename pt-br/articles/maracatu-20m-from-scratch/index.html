@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="pt-br" class="no-transitions scroll-pt-20"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.18.2"><title>Treinando o Maracatu-20M: um LLM de português do Brasil do zero · whereisanzi</title><meta name="description" content="Um modelo pequeno no estilo Llama treinado sobre um corpus de português legalmente limpo, com a arquitetura, o loop de treino e os benchmarks honestos por trás dele."><link rel="canonical" href="https://whereisanzi.github.io/pt-br/articles/maracatu-20m-from-scratch/"><link rel="alternate" type="application/rss+xml" title="whereisanzi" href="https://whereisanzi.github.io/rss.xml"><meta property="og:type" content="website"><meta property="og:title" content="Treinando o Maracatu-20M: um LLM de português do Brasil do zero · whereisanzi"><meta property="og:description" content="Um modelo pequeno no estilo Llama treinado sobre um corpus de português legalmente limpo, com a arquitetura, o loop de treino e os benchmarks honestos por trás dele."><meta property="og:url" content="https://whereisanzi.github.io/pt-br/articles/maracatu-20m-from-scratch/"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#212121" media="(prefers-color-scheme: dark)"><script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        if (theme === "dark" || (!theme && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+        window.addEventListener("load", function () {
+          document.documentElement.classList.remove("no-transitions");
+        });
+      })();
+    </script><link rel="stylesheet" href="/_astro/about.DjC_BGgh.css"></head> <body class="min-h-screen bg-white font-sans text-zinc-900 antialiased dark:bg-background-dark dark:text-zinc-100"> <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-black focus:px-4 focus:py-2 focus:text-white dark:focus:bg-white dark:focus:text-black">
+Skip to content
+</a> <header class="sticky top-0 z-40 border-b border-zinc-100 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-background-dark/80"> <div class="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6"> <a href="/pt-br" class="flex items-center gap-2.5" aria-label="whereisanzi"> <span class="grid size-7 place-items-center rounded-full bg-black text-xs font-bold text-white dark:bg-white dark:text-black">
+a
+</span> <span class="text-lg font-semibold tracking-tight text-zinc-800 dark:text-zinc-200"> whereisanzi </span> </a> <nav class="flex items-center gap-1"> <a href="/pt-br" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"> Início </a><a href="/pt-br/articles" aria-current="page" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-900 dark:text-white"> Artigos </a><a href="/pt-br/about" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"> Sobre </a> <span class="mx-1 h-5 w-px bg-zinc-200 dark:bg-zinc-700"></span> <a href="/en-us/articles/maracatu-20m-from-scratch" aria-label="Trocar idioma" title="Trocar idioma" class="grid h-9 min-w-9 place-items-center rounded-lg px-2 font-mono text-xs font-semibold uppercase text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"> EN </a> <button id="theme-toggle" type="button" aria-label="Alternar modo escuro" title="Alternar modo escuro" class="grid size-9 place-items-center rounded-lg text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"> <svg class="size-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"></path> </svg> <svg class="hidden size-5 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"> <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path> </svg> </button> <script type="module">const t=document.getElementById("theme-toggle");t?.addEventListener("click",()=>{const e=document.documentElement.classList.toggle("dark");localStorage.setItem("theme",e?"dark":"light")});</script> </nav> </div> </header> <main id="main" class="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">  <article> <a href="/pt-br/articles" class="font-mono text-sm text-zinc-900 hover:underline dark:text-white">
+← Voltar aos artigos </a> <header class="mt-6"> <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400"> <time datetime="2026-06-27T00:00:00.000Z"> 26 de junho de 2026 </time> <span>·</span> <span>9 min de leitura</span>  <span>·</span> <span class="text-zinc-900 dark:text-white"> #llm #pytorch #maracatu </span>  </div> <h1 class="mt-3 text-3xl font-bold leading-tight tracking-tight text-zinc-900 dark:text-white sm:text-4xl"> Treinando o Maracatu-20M: um LLM de português do Brasil do zero </h1> <p class="mt-3 text-lg text-zinc-600 dark:text-zinc-400"> Um modelo pequeno no estilo Llama treinado sobre um corpus de português legalmente limpo, com a arquitetura, o loop de treino e os benchmarks honestos por trás dele. </p> </header> <div class="prose mt-10 max-w-none text-zinc-700 dark:text-zinc-300">  <p>Maracatu é um projeto open source para pré-treinar modelos de linguagem em português do Brasil, com pesos abertos sob Apache 2.0 e foco em soberania em IA. Os dois primeiros modelos, <strong>Maracatu-20M</strong> e <strong>Maracatu-80M</strong>, são pequenos de propósito. Este post é principalmente sobre o menor deles, com o modelo de 80M como contraponto para mostrar o que muda quando você escala um pouco.</p>
+<p>Quero ser honesto já no primeiro parágrafo: são modelos minúsculos, e na maioria dos benchmarks de múltipla escolha eles ficam no nível do acaso ou abaixo dele. Isso não é uma falha para esconder, é justamente o motivo de publicar baselines. O que aprendi construindo o pipeline vale muito mais que qualquer linha de leaderboard.</p>
+<h2 id="por-que-treinar-pequeno">Por que treinar pequeno</h2>
+<p>Um modelo de 17M de parâmetros não vai escrever seu código nem passar no Enem. Modelos pequenos são uma função forçante: toda decisão sobre dados, tokenizer e arquitetura aparece na hora na curva de loss, e um ciclo completo de treino cabe numa única GPU modesta. Você aprende o pipeline inteiro, de ponta a ponta, em vez de alugar intuição do checkpoint de outra pessoa.</p>
+<p>O Maracatu-20M tem <strong>16,77M de parâmetros no total</strong> (10,62M deles fora da tabela de embeddings). O Maracatu-80M tem <strong>87,80M no total</strong> (75,52M fora dos embeddings). Esta é a forma completa dos dois:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Config</th><th>20M</th><th>80M</th></tr></thead><tbody><tr><td>Camadas</td><td>6</td><td>12</td></tr><tr><td>Hidden size</td><td>384</td><td>768</td></tr><tr><td>Cabeças de atenção</td><td>6</td><td>12</td></tr><tr><td>Cabeças KV</td><td>6 (sem GQA)</td><td>4 (GQA 3:1)</td></tr><tr><td>Head dim</td><td>64</td><td>64</td></tr><tr><td>Intermediate (SwiGLU)</td><td>1024</td><td>2048</td></tr><tr><td>Contexto</td><td>512</td><td>1024</td></tr><tr><td>Vocab</td><td>16000</td><td>16000</td></tr></tbody></table>
+<p>O treino do 80M é a primeira vez que o projeto usou grouped-query attention num treino de verdade, seguindo o padrão 3:1 do Llama-3, e rodou sem nenhuma instabilidade de loss.</p>
+<h2 id="arquitetura-um-llama-pequeno-não-um-gpt-2-pequeno">Arquitetura: um Llama pequeno, não um GPT-2 pequeno</h2>
+<p>As pessoas presumem que “treinado do zero no espírito do nanoGPT” significa um clone de GPT-2. O <strong>loop</strong> de treino é inspirado no nanoGPT do Karpathy, mas a <strong>arquitetura</strong> é claramente no estilo Llama. Essa distinção é o projeto inteiro. A implementação está em <code>src/maracatu/model.py</code>:</p>
+<ul>
+<li><strong>RMSNorm</strong>, sem bias. Faz cast para fp32, calcula <code>variance = x.pow(2).mean(-1)</code>, depois <code>x * rsqrt(variance + eps)</code> com <code>eps = 1e-5</code>.</li>
+<li><strong>RoPE</strong> na convenção rotate-half do Hugging Face, com <code>inv_freq = 1 / (theta ** (arange(0, head_dim, 2) / head_dim))</code> e <code>rope_theta = 10000</code>. As frequências ficam em cache como <strong>buffers não persistentes</strong>, então nunca entram no state dict. Esse detalhe importa para o carregamento limpo no Hugging Face mais adiante.</li>
+<li><strong>Atenção</strong> com <code>q_proj</code>, <code>k_proj</code>, <code>v_proj</code> e <code>o_proj</code> separados, todos <code>bias=False</code>. O GQA é feito com <code>repeat_interleave</code> nas cabeças KV, e a atenção em si é <code>F.scaled_dot_product_attention(is_causal=True)</code>. Em CUDA, o SDPA do PyTorch despacha sozinho para os kernels do FlashAttention, então não há dependência de <code>flash-attn</code>.</li>
+<li><strong>MLP SwiGLU</strong>: <code>down_proj(F.silu(gate_proj(x)) * up_proj(x))</code>, de novo <code>bias=False</code>.</li>
+<li><strong>Camadas decoder pre-norm</strong> e <strong>weight tying</strong>, onde <code>lm_head.weight</code> é o mesmo tensor de <code>embed_tokens.weight</code>.</li>
+</ul>
+<p>A inicialização é <code>normal_(0, 0.02)</code>, com uma herança explícita do nanoGPT: a re-inicialização escalada pelo residual, no estilo GPT-2, de <code>o_proj</code> e <code>down_proj</code> para <code>std = 0.02 / sqrt(2 * num_layers)</code>. Isso evita que o residual stream exploda conforme a profundidade cresce.</p>
+<h2 id="o-state-dict-do-hugging-face-por-construção">O state dict do Hugging Face, por construção</h2>
+<p>Esse é o ganho técnico mais limpo do projeto, então merece seção própria. O script de export <code>scripts/export_hf.py</code> não converte nada: cada nome de parâmetro é <strong>escrito desde o início</strong> para bater exatamente com o Llama do HF. Então você tem <code>model.embed_tokens</code>, <code>model.layers[i].self_attn.{q,k,v,o}_proj</code>, <code>mlp.{gate,up,down}_proj</code>, <code>input_layernorm</code>, <code>post_attention_layernorm</code>, <code>model.norm</code> e <code>lm_head</code>, sem nenhuma tabela de remapeamento.</p>
+<p>O export faz só as pequenas coisas honestas:</p>
+<ul>
+<li>remove o prefixo <code>_orig_mod.</code> que o <code>torch.compile</code> adiciona;</li>
+<li>se <code>tie_word_embeddings</code> está ligado, apaga <code>lm_head.weight</code> para o HF re-amarrar;</li>
+<li><code>load_state_dict(strict=False)</code>, porque os buffers de RoPE são não persistentes e simplesmente não estão lá.</li>
+</ul>
+<p>Um passo de <code>verify_equivalence</code> alimenta os mesmos ids aleatórios de tokens para a implementação do Maracatu e para a do <code>transformers</code> e exige <code>max_abs_diff &#x3C;= 1e-3</code>. Os modelos publicados validaram com <code>max_abs_diff = 0.0</code>. O <code>config.json</code> declara <code>architectures: ["LlamaForCausalLM"]</code>, então os pesos carregam pelo <code>transformers</code> sem script de conversão e sem surpresas.</p>
+<h2 id="um-tokenizer-feito-para-o-português">Um tokenizer feito para o português</h2>
+<p>Treinei um <strong>tokenizer SentencePiece BPE</strong> direto no corpus (<code>tokenizer/train_tokenizer.py</code>): <code>model_type bpe</code>, <code>vocab_size 16000</code>, <code>character_coverage 0.9995</code>, <code>split_digits</code>, <code>byte_fallback</code> e <code>remove_extra_whitespaces</code>. Os tokens especiais são <code>pad=0 &#x3C;pad></code>, <code>unk=1 &#x3C;unk></code>, <code>bos=2 &#x3C;s></code>, <code>eos=3 &#x3C;/s></code>.</p>
+<p>Uma escolha é uma limitação real e documentada: a regra de normalização é <code>nmt_nfkc_cf</code>, que é NFKC mais casefold. Isso torna o modelo <strong>só minúsculas</strong>. Simplifica o vocabulário e ajuda um modelo minúsculo, mas significa que a informação de maiúsculas desaparece antes mesmo do treino começar. Prefiro registrar isso a fingir que é um recurso.</p>
+<p>O data loader tokeniza o corpus inteiro num único arquivo <code>.npy</code> <code>uint16</code>, acrescenta <code>&#x3C;/s></code> depois de cada linha, e usa um split cronológico de cauda para validação (os últimos 0,5% do corpus são o holdout). O treino lê janelas contíguas aleatórias de <code>context_size</code> do array.</p>
+<h2 id="o-corpus-que-você-pode-treinar-legalmente">O corpus que você pode treinar legalmente</h2>
+<p>A decisão mais subestimada é o que entra. Usei apenas fontes com licença compatível com Apache 2.0, e documentei exatamente o que ficou de fora.</p>
+<p>O <strong>corpus v1 (para o modelo de 20M)</strong> é o <code>wikimedia/wikipedia</code>, config <code>20231101.pt</code>. A cadeia de filtros descarta documentos com menos de 200 caracteres, descarta linhas com menos de 30 caracteres, descarta linhas só de símbolos ou números, normaliza espaços em branco e faz dedup exato de linhas por SHA-1. O resultado são <strong>979.492 artigos</strong>, cerca de <strong>599M de tokens BPE</strong> depois da tokenização. O modelo viu aproximadamente <strong>410M de tokens</strong> ao longo de 50k passos, cerca de 0,75 de uma época.</p>
+<p>O <strong>corpus v2 (para o modelo de 80M)</strong> mantém o mesmo dump da Wikipedia e adiciona duas fontes: Project Gutenberg PT (24 obras de domínio público fixas no código, de Machado de Assis, José de Alencar, Aluísio Azevedo, Eça de Queirós, Graciliano Ramos, Lima Barreto e outros, baixadas a 1 requisição por segundo com os cabeçalhos removidos) e CulturaX-PT (<code>uonlp/CulturaX</code>, config <code>pt</code>, ODC-BY, lido em streaming). O total é cerca de <strong>1,60B de tokens</strong>. O corpus Carolina foi <strong>deliberadamente excluído</strong> porque é CC BY-NC, incompatível com a Apache 2.0.</p>
+<p>A cadeia de filtros do v2 acrescenta uma heurística de idioma por stopwords do português, dedup fuzzy com MinHash LSH (Jaccard 0,85, 128 permutações, shingles de trigramas de palavras) e uma passada de regex de PII para CPF, email, telefone, CEP e endereços, em cima do mesmo dedup exato por SHA-1. Como as versões dos datasets estão fixadas e os IDs do Gutenberg são fixos, o build inteiro é byte-reprodutível: produz o mesmo SHA-256 toda vez.</p>
+<h2 id="o-treino-em-detalhe">O treino, em detalhe</h2>
+<p>O otimizador é AdamW com betas <code>(0.9, 0.95)</code> e <code>weight_decay 0.1</code> aplicado a todos os parâmetros (sem grupos separados), com clipping de gradiente em <code>1.0</code>. O schedule é warmup linear seguido de cosine decay até um piso.</p>
+<pre class="astro-code astro-code-themes vitesse-light vitesse-dark" style="--shiki-light:#393a34;--shiki-dark:#dbd7caee;--shiki-light-bg:#ffffff;--shiki-dark-bg:#121212; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD"># configs/maracatu_20m.yaml (as partes importantes)</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">learning_rate</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 3.0e-4</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">min_lr</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 3.0e-5</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">warmup_iters</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 1000</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">max_iters</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 50000</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">batch_size</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 16</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">tokens_per_step</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 8192</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD">   # sem acumulação de gradiente</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">seed</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 42</span></span></code></pre>
+<p>O 80M usou o <code>maracatu_80m_lab.yaml</code>, o plano da RTX 3060 (não a variante de A100): <code>lr 2.5e-4 -> 2.5e-5</code>, <code>warmup 4000</code>, <code>200k</code> iterações, <code>batch 8</code>, os mesmos 8192 tokens por passo.</p>
+<p>A precisão mista é <code>torch.amp.autocast</code> em bf16, só em CUDA. <strong>Não há GradScaler</strong>, porque bf16 já tem a faixa dinâmica do fp32, e os pesos mestres ficam em fp32. Em Ampere isso deu cerca de <strong>2,4x de throughput</strong>, de 8,5k para 20,2k tokens por segundo. O <code>torch.compile</code> é opcional.</p>
+<p>O checkpointing foi feito para preempção de instância spot: é atômico, completo em RNG (então um resume é bit a bit idêntico) e tem gatilho duplo, disparando a cada N passos <strong>e</strong> a cada 30 minutos de relógio. O hash do commit git é carimbado em cada checkpoint, então um arquivo de pesos sempre sabe qual código o produziu.</p>
+<h3 id="hardware-e-o-enquadramento-chinchilla">Hardware e o enquadramento Chinchilla</h3>
+<p>O Maracatu-20M treinou numa <strong>T4 (15,6GB)</strong> do Kaggle em <strong>5h45min</strong> a cerca de 20k tokens por segundo. O Maracatu-80M treinou numa <strong>NVIDIA RTX 3060 12GB</strong> auto-hospedada em <strong>22h31min</strong> de treino contínuo, a cerca de 20.200 tokens por segundo.</p>
+<p>No eixo Chinchilla, o 20M viu cerca de 410M de tokens (~24,5 tokens por parâmetro) e o 80M viu cerca de 1,64B (~21,7 tokens por parâmetro). Os dois ficam de propósito um pouco acima do ótimo de ~20, trocando um pouco de compute por um modelo que claramente digeriu seus dados.</p>
+<h2 id="o-loop-inteiro-em-quatro-comandos">O loop inteiro em quatro comandos</h2>
+<pre class="astro-code astro-code-themes vitesse-light vitesse-dark" style="--shiki-light:#393a34;--shiki-dark:#dbd7caee;--shiki-light-bg:#ffffff;--shiki-dark-bg:#121212; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> scripts/clean_corpus.py</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD">                              # monta o corpus</span></span>
+<span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> tokenizer/train_tokenizer.py</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD">                         # treina o tokenizer</span></span>
+<span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> -m</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> maracatu.train</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> --config</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> configs/maracatu_20m.yaml</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD"> # treina o modelo</span></span>
+<span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> -m</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> maracatu.sample</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> --checkpoint</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> checkpoints/latest.pt</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> --prompt</span><span style="--shiki-light:#B5695977;--shiki-dark:#C98A7D77"> "</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D">O Brasil é</span><span style="--shiki-light:#B5695977;--shiki-dark:#C98A7D77">"</span></span></code></pre>
+<p>Os hiperparâmetros ficam em configs YAML, então um novo treino é um arquivo novo, não uma branch nova.</p>
+<h2 id="avaliação-honestamente">Avaliação, honestamente</h2>
+<p>A avaliação roda pelo <code>lm-evaluation-harness</code> da EleutherAI, zero-shot, seed 42, com uma tarefa custom de ENEM adicionada.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Métrica</th><th>Maracatu-20M</th><th>Maracatu-80M</th></tr></thead><tbody><tr><td>Perplexidade de validação</td><td>23,81</td><td>21,34</td></tr><tr><td>Melhor val loss</td><td>3,1703</td><td>3,0604</td></tr><tr><td>Belebele PT</td><td>23,78%</td><td>-</td></tr><tr><td>ASSIN Entailment</td><td>27,68%</td><td>29,08%</td></tr><tr><td>ASSIN Paraphrase</td><td>60,53%</td><td>52,42%</td></tr><tr><td>ENEM</td><td>19,22%</td><td>20,27%</td></tr></tbody></table>
+<p>A leitura honesta é esta. Quase toda tarefa de múltipla escolha fica no nível do acaso ou abaixo para os dois modelos. Só o ASSIN Paraphrase está significativamente acima do acaso. E há um resultado genuinamente estranho: o ASSIN Paraphrase <strong>cai</strong> de 60,5% no 20M para 52,4% no 80M, mesmo o modelo maior tendo a perplexidade menor. Atribuo isso a diferenças de versão do harness e à alta variância da pontuação de múltipla escolha nessa escala, não ao modelo maior ser pior em português.</p>
+<p>A linha animadora é que o 20M (17M de parâmetros) ainda supera o baseline Tucano-160M no ASSIN Paraphrase e empata com ele no ENEM. Essa é a pequena tese do projeto inteiro: um corpus curado e uma arquitetura moderna rendem em escala pequena. São baselines honestos publicados ao lado dos pesos, não alegações de estado da arte.</p>
+<h2 id="por-que-isso-importa">Por que isso importa</h2>
+<p>A maioria dos modelos abertos de português que usamos é um subproduto de treino pensado em inglês primeiro. Construir um do zero, com um corpus aberto e legalmente limpo e pesos abertos, é um pequeno ato de soberania: coloca a receita inteira no aberto, onde a comunidade brasileira pode inspecionar, forkar e melhorar.</p>
+<p>Os pesos estão no <a href="https://huggingface.co/maracatu-labs">Hugging Face</a> e no <a href="https://ollama.com/whereisanzi">Ollama</a>. O código está no <a href="https://github.com/maracatu-org/maracatu">GitHub</a>. Pull requests, melhorias de corpus e novos benchmarks são todos bem-vindos.</p>  </div> </article>  </main> <footer class="border-t border-zinc-200/70 dark:border-white/10"> <div class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-zinc-500 dark:text-zinc-400 sm:flex-row sm:px-6"> <p>© 2026 whereisanzi</p> <p> Feito com Astro. Código em  <a href="https://github.com/whereisanzi/whereisanzi.github.io" class="font-medium text-zinc-700 underline underline-offset-2 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white">GitHub</a>.
+</p> </div> </footer> <script type="module">const b='<svg class="clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185.64-.075 1.281-.136 1.927-.184"/></svg>',k='<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>';function x(){const r=(document.documentElement.lang||"").startsWith("pt"),c=r?"Copiar":"Copy",p=r?"Copiado":"Copied";document.querySelectorAll(".prose pre.astro-code").forEach(t=>{if(t.parentElement?.classList.contains("code-block"))return;const i=t.getAttribute("data-language")||"code",C=["plaintext","plain","text","ansi"].includes(i)?"text":i,a=document.createElement("div");a.className="code-block";const s=document.createElement("div");s.className="code-block__bar";const l=document.createElement("span");l.className="code-block__lang",l.textContent=C;const e=document.createElement("button");e.type="button",e.className="code-block__copy",e.setAttribute("aria-label",c);const n=document.createElement("span");n.textContent=c,e.innerHTML=b+k,e.appendChild(n);let d;e.addEventListener("click",async()=>{const m=t.querySelector("code"),u=m?m.innerText:t.innerText;try{await navigator.clipboard.writeText(u)}catch{const o=document.createElement("textarea");o.value=u,o.style.position="fixed",o.style.opacity="0",document.body.appendChild(o),o.select(),document.execCommand("copy"),o.remove()}e.setAttribute("data-copied","true"),n.textContent=p,clearTimeout(d),d=setTimeout(()=>{e.removeAttribute("data-copied"),n.textContent=c},1600)}),s.append(l,e),t.parentNode.insertBefore(a,t),a.append(s,t)})}x();</script> </body> </html>

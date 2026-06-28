@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="en-us" class="no-transitions scroll-pt-20"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.18.2"><title>Training Maracatu-20M: a Brazilian Portuguese LLM from scratch · whereisanzi</title><meta name="description" content="A small Llama-style model trained on a legally clean Portuguese corpus, with the architecture, training loop and honest benchmarks behind it."><link rel="canonical" href="https://whereisanzi.github.io/en-us/articles/maracatu-20m-from-scratch/"><link rel="alternate" type="application/rss+xml" title="whereisanzi" href="https://whereisanzi.github.io/rss.xml"><meta property="og:type" content="website"><meta property="og:title" content="Training Maracatu-20M: a Brazilian Portuguese LLM from scratch · whereisanzi"><meta property="og:description" content="A small Llama-style model trained on a legally clean Portuguese corpus, with the architecture, training loop and honest benchmarks behind it."><meta property="og:url" content="https://whereisanzi.github.io/en-us/articles/maracatu-20m-from-scratch/"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#212121" media="(prefers-color-scheme: dark)"><script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        if (theme === "dark" || (!theme && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+        window.addEventListener("load", function () {
+          document.documentElement.classList.remove("no-transitions");
+        });
+      })();
+    </script><link rel="stylesheet" href="/_astro/about.DjC_BGgh.css"></head> <body class="min-h-screen bg-white font-sans text-zinc-900 antialiased dark:bg-background-dark dark:text-zinc-100"> <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-black focus:px-4 focus:py-2 focus:text-white dark:focus:bg-white dark:focus:text-black">
+Skip to content
+</a> <header class="sticky top-0 z-40 border-b border-zinc-100 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-background-dark/80"> <div class="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6"> <a href="/en-us" class="flex items-center gap-2.5" aria-label="whereisanzi"> <span class="grid size-7 place-items-center rounded-full bg-black text-xs font-bold text-white dark:bg-white dark:text-black">
+a
+</span> <span class="text-lg font-semibold tracking-tight text-zinc-800 dark:text-zinc-200"> whereisanzi </span> </a> <nav class="flex items-center gap-1"> <a href="/en-us" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"> Home </a><a href="/en-us/articles" aria-current="page" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-900 dark:text-white"> Articles </a><a href="/en-us/about" class="rounded-full px-3 py-1.5 text-sm font-medium transition-colors text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"> About </a> <span class="mx-1 h-5 w-px bg-zinc-200 dark:bg-zinc-700"></span> <a href="/pt-br/articles/maracatu-20m-from-scratch" aria-label="Switch language" title="Switch language" class="grid h-9 min-w-9 place-items-center rounded-lg px-2 font-mono text-xs font-semibold uppercase text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"> PT </a> <button id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode" class="grid size-9 place-items-center rounded-lg text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white"> <svg class="size-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"></path> </svg> <svg class="hidden size-5 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"> <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path> </svg> </button> <script type="module">const t=document.getElementById("theme-toggle");t?.addEventListener("click",()=>{const e=document.documentElement.classList.toggle("dark");localStorage.setItem("theme",e?"dark":"light")});</script> </nav> </div> </header> <main id="main" class="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">  <article> <a href="/en-us/articles" class="font-mono text-sm text-zinc-900 hover:underline dark:text-white">
+← Back to articles </a> <header class="mt-6"> <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400"> <time datetime="2026-06-27T00:00:00.000Z"> June 26, 2026 </time> <span>·</span> <span>8 min read</span>  <span>·</span> <span class="text-zinc-900 dark:text-white"> #llm #pytorch #maracatu </span>  </div> <h1 class="mt-3 text-3xl font-bold leading-tight tracking-tight text-zinc-900 dark:text-white sm:text-4xl"> Training Maracatu-20M: a Brazilian Portuguese LLM from scratch </h1> <p class="mt-3 text-lg text-zinc-600 dark:text-zinc-400"> A small Llama-style model trained on a legally clean Portuguese corpus, with the architecture, training loop and honest benchmarks behind it. </p> </header> <div class="prose mt-10 max-w-none text-zinc-700 dark:text-zinc-300">  <p>Maracatu is an open-source project to pretrain language models in Brazilian Portuguese, with open weights under Apache 2.0 and a focus on AI sovereignty. The first two models, <strong>Maracatu-20M</strong> and <strong>Maracatu-80M</strong>, are small on purpose. This post is mostly about the smaller one, with the 80M model as the counterpoint that shows what changes when you scale a little.</p>
+<p>I want to be honest from the first paragraph: these are tiny models, and on most multiple-choice benchmarks they sit at or below random chance. That is not a failure to hide, it is the point of publishing baselines. What I learned building the pipeline is worth far more than any leaderboard line.</p>
+<h2 id="why-train-small">Why train small</h2>
+<p>A 17M-parameter model will not write your code or pass a bar exam. Small models are a forcing function: every decision about data, tokenizer and architecture shows up immediately in the loss curve, and a full training cycle fits on a single modest GPU. You learn the whole pipeline end to end instead of renting intuition from someone else’s checkpoint.</p>
+<p>Maracatu-20M has <strong>16.77M total parameters</strong> (10.62M of them outside the embedding table). Maracatu-80M has <strong>87.80M total</strong> (75.52M non-embedding). Here is the full shape of both:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Config</th><th>20M</th><th>80M</th></tr></thead><tbody><tr><td>Layers</td><td>6</td><td>12</td></tr><tr><td>Hidden size</td><td>384</td><td>768</td></tr><tr><td>Attention heads</td><td>6</td><td>12</td></tr><tr><td>KV heads</td><td>6 (no GQA)</td><td>4 (GQA 3:1)</td></tr><tr><td>Head dim</td><td>64</td><td>64</td></tr><tr><td>Intermediate (SwiGLU)</td><td>1024</td><td>2048</td></tr><tr><td>Context length</td><td>512</td><td>1024</td></tr><tr><td>Vocab</td><td>16000</td><td>16000</td></tr></tbody></table>
+<p>The 80M run is the first time the project used grouped-query attention in a real training run, following the Llama-3 3:1 pattern, and it ran with no loss instability at all.</p>
+<h2 id="architecture-a-small-llama-not-a-small-gpt-2">Architecture: a small Llama, not a small GPT-2</h2>
+<p>People assume “trained from scratch in the spirit of nanoGPT” means a GPT-2 clone. The training <strong>loop</strong> is inspired by Karpathy’s nanoGPT, but the <strong>architecture</strong> is squarely Llama-style. That distinction is the whole design. The implementation lives in <code>src/maracatu/model.py</code>:</p>
+<ul>
+<li><strong>RMSNorm</strong>, no bias. It casts to fp32, computes <code>variance = x.pow(2).mean(-1)</code>, then <code>x * rsqrt(variance + eps)</code> with <code>eps = 1e-5</code>.</li>
+<li><strong>RoPE</strong> using the Hugging Face rotate-half convention, with <code>inv_freq = 1 / (theta ** (arange(0, head_dim, 2) / head_dim))</code> and <code>rope_theta = 10000</code>. The frequencies are cached as <strong>non-persistent buffers</strong>, so they never enter the state dict. That detail matters for clean Hugging Face loading later.</li>
+<li><strong>Attention</strong> with separate <code>q_proj</code>, <code>k_proj</code>, <code>v_proj</code> and <code>o_proj</code>, all <code>bias=False</code>. GQA is done with <code>repeat_interleave</code> on the KV heads, and the actual attention is <code>F.scaled_dot_product_attention(is_causal=True)</code>. On CUDA, PyTorch SDPA dispatches to FlashAttention kernels by itself, so there is no <code>flash-attn</code> dependency.</li>
+<li><strong>SwiGLU MLP</strong>: <code>down_proj(F.silu(gate_proj(x)) * up_proj(x))</code>, again <code>bias=False</code>.</li>
+<li><strong>Pre-norm decoder layers</strong> and <strong>weight tying</strong>, where <code>lm_head.weight</code> is the same tensor as <code>embed_tokens.weight</code>.</li>
+</ul>
+<p>Initialization is <code>normal_(0, 0.02)</code>, with one explicit nanoGPT inheritance: the GPT-2-style residual-scaled re-init of <code>o_proj</code> and <code>down_proj</code> to <code>std = 0.02 / sqrt(2 * num_layers)</code>. That keeps the residual stream from blowing up as depth grows.</p>
+<h2 id="the-hugging-face-state-dict-by-construction">The Hugging Face state dict, by construction</h2>
+<p>This is the cleanest technical win of the project, so it gets its own section. The export script <code>scripts/export_hf.py</code> does not convert anything: every parameter name is <strong>authored from the start</strong> to match HF Llama exactly. So you get <code>model.embed_tokens</code>, <code>model.layers[i].self_attn.{q,k,v,o}_proj</code>, <code>mlp.{gate,up,down}_proj</code>, <code>input_layernorm</code>, <code>post_attention_layernorm</code>, <code>model.norm</code> and <code>lm_head</code>, with no remapping table anywhere.</p>
+<p>Export does only the small honest things:</p>
+<ul>
+<li>strip the <code>_orig_mod.</code> prefix that <code>torch.compile</code> adds;</li>
+<li>if <code>tie_word_embeddings</code> is set, delete <code>lm_head.weight</code> so HF re-ties it;</li>
+<li><code>load_state_dict(strict=False)</code>, because the RoPE buffers are non-persistent and simply are not there.</li>
+</ul>
+<p>A <code>verify_equivalence</code> step feeds identical random token ids to both the Maracatu implementation and the <code>transformers</code> one and asserts <code>max_abs_diff &#x3C;= 1e-3</code>. The published models validated at <code>max_abs_diff = 0.0</code>. The <code>config.json</code> declares <code>architectures: ["LlamaForCausalLM"]</code>, so the weights load through <code>transformers</code> with no conversion script and no surprises.</p>
+<h2 id="a-tokenizer-built-for-portuguese">A tokenizer built for Portuguese</h2>
+<p>I trained a <strong>SentencePiece BPE tokenizer</strong> directly on the corpus (<code>tokenizer/train_tokenizer.py</code>): <code>model_type bpe</code>, <code>vocab_size 16000</code>, <code>character_coverage 0.9995</code>, <code>split_digits</code>, <code>byte_fallback</code>, and <code>remove_extra_whitespaces</code>. Special tokens are <code>pad=0 &#x3C;pad></code>, <code>unk=1 &#x3C;unk></code>, <code>bos=2 &#x3C;s></code>, <code>eos=3 &#x3C;/s></code>.</p>
+<p>One choice is a real, documented limitation: the normalization rule is <code>nmt_nfkc_cf</code>, which is NFKC plus casefold. That makes the model <strong>lowercase-only</strong>. It simplifies the vocabulary and helps a tiny model, but it means casing information is gone before training even starts. I would rather write that down than pretend it is a feature.</p>
+<p>The data loader tokenizes the whole corpus into a single <code>uint16</code> <code>.npy</code> file, appends <code>&#x3C;/s></code> after every line, and uses a chronological tail split for validation (the last 0.5% of the corpus is the holdout). Training reads random contiguous windows of <code>context_size</code> from the array.</p>
+<h2 id="the-corpus-you-can-legally-train-on">The corpus you can legally train on</h2>
+<p>The single most underrated decision is what you put in. I only used sources with licenses compatible with Apache 2.0, and I documented exactly what got dropped.</p>
+<p><strong>Corpus v1 (for the 20M model)</strong> is <code>wikimedia/wikipedia</code>, config <code>20231101.pt</code>. The filter chain drops documents under 200 characters, drops lines under 30 characters, drops symbol- or number-only lines, normalizes whitespace, and does exact SHA-1 line dedup. The result is <strong>979,492 articles</strong>, about <strong>599M BPE tokens</strong> after tokenization. The model saw roughly <strong>410M tokens</strong> across 50k steps, about 0.75 of an epoch.</p>
+<p><strong>Corpus v2 (for the 80M model)</strong> keeps the same Wikipedia dump and adds two sources: Project Gutenberg PT (24 hardcoded public-domain works by Machado de Assis, José de Alencar, Aluísio Azevedo, Eça de Queirós, Graciliano Ramos, Lima Barreto and others, scraped at 1 request per second with headers stripped) and CulturaX-PT (<code>uonlp/CulturaX</code>, config <code>pt</code>, ODC-BY, read in streaming). Total is about <strong>1.60B tokens</strong>. The Carolina corpus was <strong>deliberately excluded</strong> because it is CC BY-NC, which is incompatible with Apache 2.0.</p>
+<p>The v2 filter chain adds a PT-stopword language heuristic, MinHash LSH fuzzy dedup (Jaccard 0.85, 128 permutations, word-trigram shingles), and a PII regex pass for CPF, email, phone, CEP and addresses, on top of the same exact SHA-1 dedup. Because the dataset versions are pinned and the Gutenberg IDs are fixed, the whole build is byte-reproducible: it produces an identical SHA-256 every time.</p>
+<h2 id="training-in-detail">Training, in detail</h2>
+<p>The optimizer is AdamW with betas <code>(0.9, 0.95)</code> and <code>weight_decay 0.1</code> applied to all parameters (no separate parameter groups), with gradient clipping at <code>1.0</code>. The schedule is linear warmup followed by cosine decay to a floor.</p>
+<pre class="astro-code astro-code-themes vitesse-light vitesse-dark" style="--shiki-light:#393a34;--shiki-dark:#dbd7caee;--shiki-light-bg:#ffffff;--shiki-dark-bg:#121212; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD"># configs/maracatu_20m.yaml (the important bits)</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">learning_rate</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 3.0e-4</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">min_lr</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 3.0e-5</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">warmup_iters</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 1000</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">max_iters</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 50000</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">batch_size</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 16</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">tokens_per_step</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 8192</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD">   # no gradient accumulation</span></span>
+<span class="line"><span style="--shiki-light:#998418;--shiki-dark:#B8A965">seed</span><span style="--shiki-light:#999999;--shiki-dark:#666666">:</span><span style="--shiki-light:#2F798A;--shiki-dark:#4C9A91"> 42</span></span></code></pre>
+<p>The 80M used <code>maracatu_80m_lab.yaml</code>, the RTX 3060 plan (not the A100 variant): <code>lr 2.5e-4 -> 2.5e-5</code>, <code>warmup 4000</code>, <code>200k</code> iters, <code>batch 8</code>, the same 8192 tokens per step.</p>
+<p>Mixed precision is <code>torch.amp.autocast</code> in bf16, on CUDA only. There is <strong>no GradScaler</strong>, because bf16 already has fp32 dynamic range, and the master weights stay fp32. On Ampere this gave about <strong>2.4x throughput</strong>, from 8.5k to 20.2k tokens per second. <code>torch.compile</code> is optional.</p>
+<p>Checkpointing was built for spot-instance preemption: it is atomic, RNG-complete (so a resume is bit-identical), and dual-triggered, firing every N steps <strong>and</strong> every 30 minutes of wall-clock time. The git commit hash is stamped into every checkpoint, so a weight file always knows which code produced it.</p>
+<h3 id="hardware-and-the-chinchilla-framing">Hardware and the Chinchilla framing</h3>
+<p>Maracatu-20M trained on a Kaggle <strong>T4 (15.6GB)</strong> in <strong>5h45min</strong> at roughly 20k tokens per second. Maracatu-80M trained on a self-hosted <strong>NVIDIA RTX 3060 12GB</strong> in <strong>22h31min</strong> of continuous training at about 20,200 tokens per second.</p>
+<p>On the Chinchilla axis, the 20M saw about 410M tokens (~24.5 tokens per parameter) and the 80M saw about 1.64B (~21.7 tokens per parameter). Both are deliberately a little above the ~20 optimum, trading a bit of compute for a model that has clearly digested its data.</p>
+<h2 id="the-whole-loop-in-four-commands">The whole loop in four commands</h2>
+<pre class="astro-code astro-code-themes vitesse-light vitesse-dark" style="--shiki-light:#393a34;--shiki-dark:#dbd7caee;--shiki-light-bg:#ffffff;--shiki-dark-bg:#121212; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> scripts/clean_corpus.py</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD">                              # build the corpus</span></span>
+<span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> tokenizer/train_tokenizer.py</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD">                         # train the tokenizer</span></span>
+<span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> -m</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> maracatu.train</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> --config</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> configs/maracatu_20m.yaml</span><span style="--shiki-light:#A0ADA0;--shiki-dark:#758575DD"> # train the model</span></span>
+<span class="line"><span style="--shiki-light:#59873A;--shiki-dark:#80A665">python</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> -m</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> maracatu.sample</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> --checkpoint</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D"> checkpoints/latest.pt</span><span style="--shiki-light:#A65E2B;--shiki-dark:#C99076"> --prompt</span><span style="--shiki-light:#B5695977;--shiki-dark:#C98A7D77"> "</span><span style="--shiki-light:#B56959;--shiki-dark:#C98A7D">O Brasil é</span><span style="--shiki-light:#B5695977;--shiki-dark:#C98A7D77">"</span></span></code></pre>
+<p>Hyperparameters live in YAML configs, so a new run is a new file, not a new branch.</p>
+<h2 id="evaluation-honestly">Evaluation, honestly</h2>
+<p>Evaluation runs through EleutherAI’s <code>lm-evaluation-harness</code>, zero-shot, seed 42, with a custom ENEM task added.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th>Maracatu-20M</th><th>Maracatu-80M</th></tr></thead><tbody><tr><td>Validation perplexity</td><td>23.81</td><td>21.34</td></tr><tr><td>Best val loss</td><td>3.1703</td><td>3.0604</td></tr><tr><td>Belebele PT</td><td>23.78%</td><td>-</td></tr><tr><td>ASSIN Entailment</td><td>27.68%</td><td>29.08%</td></tr><tr><td>ASSIN Paraphrase</td><td>60.53%</td><td>52.42%</td></tr><tr><td>ENEM</td><td>19.22%</td><td>20.27%</td></tr></tbody></table>
+<p>Here is the honest read. Nearly every multiple-choice task sits at or below random chance for both models. Only ASSIN Paraphrase is meaningfully above chance. And there is a genuinely odd result: ASSIN Paraphrase <strong>drops</strong> from 60.5% on the 20M to 52.4% on the 80M, even though the larger model has the lower perplexity. I attribute that to harness-version differences and the high variance of MCQ scoring at this scale, not to the bigger model being worse at Portuguese.</p>
+<p>The encouraging line is that the 20M (17M parameters) still beats the Tucano-160M baseline on ASSIN Paraphrase and ties it on ENEM. That is the small thesis of the whole project: a curated corpus and a modern architecture pay off at small scale. These are honest baselines published next to their weights, not state-of-the-art claims.</p>
+<h2 id="why-it-matters">Why it matters</h2>
+<p>Most open Portuguese models we use are afterthoughts of English-first training. Building one from scratch, with a legally clean open corpus and open weights, is a small act of sovereignty: it puts the whole recipe in the open where the Brazilian community can inspect, fork and improve it.</p>
+<p>The weights are on <a href="https://huggingface.co/maracatu-labs">Hugging Face</a> and <a href="https://ollama.com/whereisanzi">Ollama</a>. The code is on <a href="https://github.com/maracatu-org/maracatu">GitHub</a>. Pull requests, corpus improvements and new benchmarks are all welcome.</p>  </div> </article>  </main> <footer class="border-t border-zinc-200/70 dark:border-white/10"> <div class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-3 px-4 py-8 text-sm text-zinc-500 dark:text-zinc-400 sm:flex-row sm:px-6"> <p>© 2026 whereisanzi</p> <p> Built with Astro. Source on  <a href="https://github.com/whereisanzi/whereisanzi.github.io" class="font-medium text-zinc-700 underline underline-offset-2 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white">GitHub</a>.
+</p> </div> </footer> <script type="module">const b='<svg class="clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1-.75-.75c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185.64-.075 1.281-.136 1.927-.184"/></svg>',k='<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>';function x(){const r=(document.documentElement.lang||"").startsWith("pt"),c=r?"Copiar":"Copy",p=r?"Copiado":"Copied";document.querySelectorAll(".prose pre.astro-code").forEach(t=>{if(t.parentElement?.classList.contains("code-block"))return;const i=t.getAttribute("data-language")||"code",C=["plaintext","plain","text","ansi"].includes(i)?"text":i,a=document.createElement("div");a.className="code-block";const s=document.createElement("div");s.className="code-block__bar";const l=document.createElement("span");l.className="code-block__lang",l.textContent=C;const e=document.createElement("button");e.type="button",e.className="code-block__copy",e.setAttribute("aria-label",c);const n=document.createElement("span");n.textContent=c,e.innerHTML=b+k,e.appendChild(n);let d;e.addEventListener("click",async()=>{const m=t.querySelector("code"),u=m?m.innerText:t.innerText;try{await navigator.clipboard.writeText(u)}catch{const o=document.createElement("textarea");o.value=u,o.style.position="fixed",o.style.opacity="0",document.body.appendChild(o),o.select(),document.execCommand("copy"),o.remove()}e.setAttribute("data-copied","true"),n.textContent=p,clearTimeout(d),d=setTimeout(()=>{e.removeAttribute("data-copied"),n.textContent=c},1600)}),s.append(l,e),t.parentNode.insertBefore(a,t),a.append(s,t)})}x();</script> </body> </html>
